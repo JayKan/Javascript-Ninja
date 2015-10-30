@@ -5,42 +5,49 @@
     <script src="./log.js"></script>
     <script src="./simple_test_assertion.js"></script>
     <script src="./group_test_assertion.js"></script>
+    <script src="./asynchronous_test_assertion.js"></script>
 
-    <script type="text/javascript">
+    <style>
+      #results li.pass {
+        color: green;
+      }
+      #results li.fail {
+        color: red;
+      }
+    </style>
+    <script>
       var x = 213;
       log(x);
     </script>
 
     <script>
       window.onload = function(){
-        assert(true, 'Yay I\'m still passing && the test suite is running.');
-        assert(false, 'Nope. Error failing :(');
-      }
+        test('Group test suite #1', function(){
+          assert(true, 'First group assertion completed.' );
+        });
+        test('Group test suite #2', function(){
+          assert(true, 'First test completed.');
+          assert(false, 'Second test failed' );
+          assert(true, 'Third assertion completed.');
+        });
+        test('Asynchronous Test #1', function(){
+          pause();
+          setTimeout(function(){
+            assert(true, 'First asynchronous test completed.');
+            assert(false, '2nd failed');
+            resume();
+          }, 2000)
+        });
+        test('Asynchronous Test #2 after', function(){
+          pause();
+          setTimeout(function(){
+            assert(true, 'Second asynchronous test completed.');
+            resume();
+          }, 1500)
+        })
+      };
     </script>
 
-    <script>
-     window.onload = function(){
-       test('A test', function(){
-         assert(true, 'First assertion completed.'  );
-         assert(true, 'Second assertion completed.' );
-         assert(true, 'Third assertion completed.'  );
-       });
-       test('Another test', function(){
-         assert(true, 'First test completed.');
-         assert(false, 'Second test failed' );
-         assert(true, 'Third assertion completed.');
-       });
-       test('A third test', function(){
-         assert(null, 'fail');
-         assert(5, 'pass');
-       })
-     };
-    </script>
-
-    <style>
-      #results li.pass { color: green; }
-      #results li.fail { color: red;   }
-    </style>
   </head>
 
   <body>
