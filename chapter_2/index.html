@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Listing 2.2</title>
+    <script src="./log.js"></script>
+    <script src="./simple_test_assertion.js"></script>
+    <script src="./group_test_assertion.js"></script>
+
+    <script type="text/javascript">
+      var x = 213;
+      log(x);
+    </script>
+
+    <script>
+      window.onload = function(){
+        assert(true, 'Yay I\'m still passing && the test suite is running.');
+        assert(false, 'Nope. Error failing :(');
+      }
+    </script>
+
+    <script>
+     window.onload = function(){
+       test('A test', function(){
+         assert(true, 'First assertion completed.'  );
+         assert(true, 'Second assertion completed.' );
+         assert(true, 'Third assertion completed.'  );
+       });
+       test('Another test', function(){
+         assert(true, 'First test completed.');
+         assert(false, 'Second test failed' );
+         assert(true, 'Third assertion completed.');
+       });
+       test('A third test', function(){
+         assert(null, 'fail');
+         assert(5, 'pass');
+       })
+     };
+    </script>
+
+    <style>
+      #results li.pass { color: green; }
+      #results li.fail { color: red;   }
+    </style>
+  </head>
+
+  <body>
+    <ul id="results"></ul>
+  </body>
+</html>
