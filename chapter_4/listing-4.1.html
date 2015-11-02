@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Anonymous Functions</title>
+  <link rel="stylesheet" href="../common/styles.css">
+  <script src="../common/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <ul id="results"></ul>
+
+  <script>
+    // Establishes an anonymous function as event handler.
+    // There's no need to create a named function only to reference it in this location.
+    window.onload = function(){
+      assert(true, 'Power!');
+    };
+
+    // Creates a function to be used as a method for ninja.
+    // We'll be using the property named shout to invoke the function, so it doesn't need its own name;
+    var ninja = {
+      shout: function(){
+        assert(true, 'Ninja');
+      }
+    };
+    ninja.shout();
+
+    // Passes a function to the setTimeout() function
+    // as a callback to be invoked when the timer expires.
+    setTimeout(function(){
+      assert(true, 'Forever!');
+    }, 500)
+  </script>
+
+  <!-- NOTE: Recursion in named functions -->
+  <script>
+    // Defines a recursive chirping function that calls itself by
+    // name until it determines that it's done.
+    function chirp(n){
+      return n > 1 ? chirp( n - 1 ) + '-chirp' : 'chirp';
+    }
+
+    // Asserts that a ninja can chirp as expected.
+    assert(chirp(3) == 'chirp-chirp-chirp',
+    'Calling the named function comes naturally.');
+  </script>
+
+  <!-- NOTE: Recursion with methods -->
+  <script>
+    // Defines a recursive chirp function as a property of the ninja object.
+    // We now need to call the method from within itself using the reference to the object's methods.
+    var ninja = {
+      chirp: function(n){
+        return n > 1 ? ninja.chirp( n - 1 ) + '-chirp' : 'chirp';
+      }
+    };
+
+    assert(ninja.chirp(4) === 'chirp-chirp-chirp-chirp',
+    'An Object property isn\'t too confusing, either.');
+
+  </script>
+</body>
+
+
+</html>
