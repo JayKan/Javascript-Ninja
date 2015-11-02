@@ -1,0 +1,13 @@
+body {
+    margin-top: 20px;
+}
+#results {
+    border: 2px solid black;
+    margin:10px 5px;
+}
+#results li.pass {
+    color: green;
+}
+#results li.fail {
+    color: red;
+}

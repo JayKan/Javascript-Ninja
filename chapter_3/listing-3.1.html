@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Useless callback example</title>
+  <link rel="stylesheet"  href="../common/styles.css"/>
+  <script src="../chapter_2/simple_test_assertion.js"></script>
+
+  <script>
+
+    // IMPORTANT NOTES about 'Functions Invocations':
+    // 4 ways that functions can be invoked:
+    // 1) As a function, in which the function is invoked in a straightforward manner
+    // 2) As a method, which ties the invocation to an object, enabling object-oriented programming.
+    //    - When a function is assigned to a property of an object and the invocation occurs by referencing
+    //      the function using that property, then the function is invoked as a method as that object.
+    // 3) As a constructor, in which a new object is brought into being
+    // 4) Via its apply() or call() methods, which is ki
+    var text = 'Domo arigtato!';
+    function useless(callback){
+      return callback();
+    }
+
+    // Declares a named function. The name is available throughout the current
+    // scope and is implicitly added as a property of window.
+    function isNimble(){
+      return true;
+    }
+
+    // Creates an anonymous function that's assigned to the variable canFly.
+    // The variable is a window property and the name property of the function
+    // is empty
+    var canFly = function(){
+      return true;
+    };
+
+    // Creates an anonymous function referenced by property of window
+    window.isDeadly = function(){
+      return true;
+    };
+
+    // Defines an inner function inside the outer function. Tests that inner()
+    // is able to be referenced before and after its declaration and that
+    // no global name is created for inner().
+    function outer(){
+      assert(typeof inner === 'function',
+      'inner() in scope before declaration');
+
+      function inner(){}
+
+      assert(typeof inner === 'function',
+      'inner() in scope after declaration' );
+
+      assert(window.inner === undefined,
+      'inner() not in global scope');
+    }
+
+    // The variable that assign a function has NOTHING to do
+    // with its name; that's controlled by what we actually
+    // name the function in its literal.
+    window.wieldeSword = function swingsSword(){
+      return true;
+    };
+
+    window.onload = function(){
+
+      assert(useless(function(){ return text;}) === text,
+          'The useless function works! ' + text);
+
+      // The first test asserts that the window property
+      // is established, and the second that the property
+      // of the function is recorded.
+      assert(typeof window.isNimble === 'function',
+      'isNimble() defined');
+      assert(isNimble.name === 'isNimble',
+      'isNimble() has a name.');
+
+      // Tests that the variable references the anonymous function
+      // that the name property is set to the empty string ( not null )
+      assert(typeof window.canFly === 'function',
+      'canFly() defined.');
+      assert(canFly.name === '',
+      'canFly() has no name.');
+
+      // Tests that the property references the function.
+      // We could also test that the function has an empty name property here.
+      assert(typeof window.isDeadly === 'function',
+      'isDeadly() defined.');
+
+      // Tests that outer() can be referenced in the global scope,
+      // but that inner() can't
+      outer();
+
+      assert(window.wieldeSword.name === 'swingsSword',
+      'wieldSword\'s real name is swingsSword.');
+    };
+
+  </script>
+</head>
+
+<body>
+  <ul id="results"></ul>
+</body>
+
+</html>
