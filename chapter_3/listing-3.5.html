@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Invocation with the apply() and call() methods</title>
+  <link rel="stylesheet" href="../common/styles.css"/>
+  <script src="../chapter_2/simple_test_assertion.js"></script>
+
+  <script>
+    // IMPORTANT NOTES about apply() && call() [ methods of functions ]
+    // To invoke a function using its apply() method, we pass two parameters to apply():
+    //   1) the object to be used as the function context;
+    //   2) and an array of values to be used as the invocation arguments;
+    // The call() method is used in a similar manner, except that the arguments are passed directly
+    // in the arguments list rather than as an array.
+
+    // The apply() and call() methods let us set the function context to any object of our choosing.
+
+    // Defines the function
+    function juggle(){
+      var result = 0;
+      // Sums up arguments
+      for ( var n = 0, j = arguments.length; n<j; n++ ){
+        result+=arguments[n];
+      }
+      // Stores result on context
+      this.result = result;
+    }
+
+    window.onload = function(){
+
+      // Sets up test objects
+      var ninja1 = {};
+      var ninja2 = {};
+
+      // Applies function
+      juggle.apply(ninja1, [1,2,3,4] );
+
+      // Calls function
+      juggle.call(ninja2, 5,6,7,8 );
+
+      // Tests expected results
+      assert(ninja1.result === 10,
+      'Ninja1: juggled via apply....');
+      assert(ninja2.result === 26,
+      'Ninja2: juggled via call.....');
+    };
+
+  </script>
+</head>
+
+<body>
+  <ul id="results"></ul>
+</body>
+
+</html>
