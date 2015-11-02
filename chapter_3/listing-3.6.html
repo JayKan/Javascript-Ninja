@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Using for-each function to demonstrate setting a function context.</title>
+  <link rel="stylesheet" href="../common/styles.css"/>
+  <script src="../chapter_2/simple_test_assertion.js"></script>
+  <script>
+
+    // Defines the forEach function
+    function forEach(list, callback){
+      for ( var n = 0, j = list.length; n<j; n++ ){
+        // Invokes the callback via call() method
+        callback.call(list[0], n);
+      }
+    }
+    window.onload = function(){
+
+
+      // Sets up test subject;
+      var weapons = [ 'shuriken', 'katana', 'nunchucks'];
+
+      // Tests the function
+      forEach(
+          weapons,
+          function(index){
+            assert( this == weapons[index],
+            'Got the expected value of ' + weapons[index]);
+          }
+      );
+    };
+
+  </script>
+</head>
+
+<body>
+  <ul id="results"></ul>
+</body>
+
+</html>

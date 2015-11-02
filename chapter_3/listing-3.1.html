@@ -42,6 +42,7 @@
     // Defines an inner function inside the outer function. Tests that inner()
     // is able to be referenced before and after its declaration and that
     // no global name is created for inner().
+    // Inner named functions are available anywhere within the enclosing function (hoisted), even as forward references
     function outer(){
       assert(typeof inner === 'function',
       'inner() in scope before declaration');
