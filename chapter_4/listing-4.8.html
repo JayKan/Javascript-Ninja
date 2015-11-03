@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Storing Functions</title>
+  <link rel="stylesheet" href="../common/styles.css">
+  <script src="../common/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <ul id="results"></ul>
+  <input id="first">
+  <input id="second">
+  <!-- 4.8 Storing a collection of unique functions -->
+  <script>
+    var store = {
+      // Keeps track of the next available id to be assigned.
+      nextId: 1,
+
+      // Creates an object to server as a cache in which
+      // we'll store functions
+      cache: {},
+
+      // Adds functions to the cache,
+      // but only if they're unique
+      add: function(fn){
+        if ( !fn.id ){
+          fn.id = store.nextId++;
+          return !!(store.cache[fn.id] = fn);
+        }
+      }
+    };
+
+    function ninja(){}
+
+    // Tests that all works as planned
+    assert(store.add(ninja),
+    'My ninja function was safely added.');
+    assert(! store.add(ninja),
+    'But it was only added once.');
+  </script>
+
+  <!-- 4.9 Memoizing previously computed values -->
+  <script>
+    // NOTE: 'Self-memoization functions'
+    // 'Memoization' is the process of building a function that's capable of
+    // remembering its previously computed values
+    function isPrime(value){
+      // Creates the cache
+      if ( !isPrime.answers ) {
+        // The creation of this empty object wil ONLY occur on the first call to the function
+        // after that, the cache will exist
+        isPrime.answers = {};
+      }
+      // Checks for cached values
+      if ( isPrime.answers[value] != null ){
+        return isPrime.answers[value];
+      }
+      // We will store the computed answer (true of false)
+      var prime = value != 1; // 1 can never be prime, remember?
+      
+      // Perform the calculations needed to determine 
+      // whether current value is prime or not.
+      for ( var i = 2; i < value; i++ ){
+        if ( value % i == 0 ){
+          prime = false;
+          break;
+        }
+      }
+      // Stores the computed value
+      return isPrime.answers[value] = prime;
+    }
+
+    // Tests that it all works
+    assert( isPrime(5), '5 is prime of course!');
+    assert( isPrime.answers[5], 'The answer was cached yay!!');
+  </script>
+
+  <!-- 4.10 Simulating array-like methods -->
+  <script>
+    var elements = {
+      // Stores the count of elements. If we're going to pretend we're
+      // an array, we're going to need someplace to store the number of items that we're storing
+      // length property will record the number of elements that are stored!
+      length: 0,
+
+      // Implements the method to add elements to our collection. The prototype for Array
+      // already has a method to do this
+      add: function(elem){
+        Array.prototype.push.call(this, elem);
+      },
+
+      // Implements a method named gather() to find elements by their id values
+      // and add them to our collection
+      gather: function(id){
+        this.add( document.getElementById(id));
+      }
+    };
+
+    // Adds first input element
+    elements.gather('first');
+    // Test gather() method
+    assert(elements.length == 1 && elements[0].nodeType,
+    'Verify that we have an element in our stash.');
+
+    // Adds second input element
+    elements.gather('second');
+    assert(elements.length == 2 && elements[1].nodeType,
+    'Verify the other insertion working as well.');
+  </script>
+
+  <!-- 4.11 Generic min() and max() functions for arrays -->
+  <script>
+    // Implements a function to find the smallest value
+    function smallest(array){
+      // Notice the 'context' here being the Math object. This isn't necessary
+      // See null or Math both works
+      return Math.min.apply(null, array);
+    }
+    // Implements a function find the largest value
+    function largest(array){
+      return Math.max.apply(Math, array);
+    }
+
+    // Tests the implementations
+    assert( smallest([0, 1, 2, 3, 4]) == 0,
+    'Located the smallest value. ( should be 0 )');
+    assert( largest([0, 1, 2, 3, 4, 5]) == 5,
+    'Located the largest value. ( should be 5 )');
+
+  </script>
+</body>
+
+</html>

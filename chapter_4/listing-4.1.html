@@ -58,6 +58,98 @@
 
     assert(ninja.chirp(4) === 'chirp-chirp-chirp-chirp',
     'An Object property isn\'t too confusing, either.');
+  </script>
+
+  <!-- Recursion using a missing function reference -->
+  <script>
+    // Defines ninja with chirp() method
+    var ninja = {
+      chirp: function(n){
+        return n > 1 ? this.chirp(n - 1) + '-chirp' : 'chirp';
+      }
+    };
+
+    // Creates a chirp() method on samurai by referencing the
+    // existing method of same name on ninja.
+    var samurai = {
+      chirp: ninja.chirp
+    };
+
+    // Redefines ninja such that it has no properties.
+    // This means that its chirp property goes away!!
+    ninja = {};
+
+    try {
+      assert(samurai.chirp(3) === 'chirp-chirp-chirp',
+      'Fixing by using this instead of ninja. Is this going to work? Of course it will after..');
+    } catch(e) {
+      assert(false,
+      'Uh, this isn\'t good! Where\'d ninja.chirp go');
+    }
+  </script>
+
+  <!-- Using an inline function in a recursive fashion -->
+  <script>
+    // Defines Ninja again
+    var ninja = {
+      // Declares a named 'signal' inline function this time instead of anonymous function
+      chirp: function signal(n){
+        return n > 1 ? signal(n - 1) + '-chirp' : 'chirp';
+      }
+    };
+
+    // Tests that it works just as expected
+    assert(ninja.chirp(3) === 'chirp-chirp-chirp',
+    'Works as we would expect it to!');
+
+    // Creates a new samurai object
+    var samurai = {
+      chirp: ninja.chirp
+    };
+
+    // Wipes out the ninja object just like in the previous example
+    ninja = {};
+
+    // Tests that it still works and it does!
+    assert(samurai.chirp(3) === 'chirp-chirp-chirp',
+    'The method correctly calls itself.');
+  </script>
+
+  <!-- Verifying the identity of an inline function -->
+  <script>
+    // Declares a named inline function and assigns it to variable.
+    var ninja = function myNinja(){
+
+      // Tests that two names are equivalent inside the inline function
+      assert(ninja === myNinja,
+      'This function is named two things at once!');
+    };
+
+    // Invokes the function to perform the internal test.
+    ninja();
+
+    // Tests that the inline function's name isn't
+    // available outside in the inline function.
+    assert(typeof myNinja == 'undefined',
+    'But myNinja is\'t defined outside of the function.');
+  </script>
+
+  <!-- Using arguments.callee to reference the calling function -->
+  <script>
+    var ninja = {
+      chirp: function(n){
+        // References arguments.callee property
+        return n > 1 ? arguments.callee(n - 1) + '-chirp' : 'chirp';
+      }
+    };
+    assert(ninja.chirp(2) === 'chirp-chirp',
+    'Arguments.callee is the function itself!!!!');
+
+
+    var obj = {};
+    var fn = function(){};
+    assert(obj && fn,
+    'Both the object and function exist.');
 
   </script>
 </body>
