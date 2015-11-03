@@ -129,6 +129,121 @@
     'Located the largest value. ( should be 5 )');
 
   </script>
+
+  <!-- 4.12 Traversing variable-length argument lists -->
+  <script>
+    // Implements the merge() function
+    function merge( root ){
+      for ( var i = 1, j = arguments.length; i<j; i++ ){
+        for ( var key in arguments[i] ){
+          root[key] = arguments[i][key];
+        }
+      }
+      return root;
+    }
+
+    // Calls the implemented function
+    var merged = merge(
+        {name: 'Jay Kan' },
+        {city: 'San Jose'}
+    );
+
+//    console.log('Merged result: ', merged);
+    // Tests that it did merge the right things
+    assert( merged.name === 'Jay Kan',
+    'The original name is intact.');
+    assert( merged.city === 'San Jose',
+    'And the city has been copied over as well');
+
+  </script>
+
+  <!-- 4.13 Slicing the arguments list -->
+  <script>
+    // Implements a function that multiplies the first argument with the
+    // largest of the remaining arguments
+    function multiMax( multi ){
+      // 'arguments' parameter doesn't reference a true array
+      // The 'arguments' object is not an Array. it is similar to an Array, but does not have
+      // any Array properties except length. However, it can be converted to a real Array using:
+      // var args = Array.prototype.slice.call(arguments, 1);
+      return multi * Math.max.apply(Math,
+              Array.prototype.slice.call(arguments, 1));
+    }
+    assert(multiMax(3, 1, 2, 3) == 9,
+        '3*3=9 (First argument, by largest remaining)');
+
+    // NOTE: function's length property that will give us insight into how the function was declared.
+    // As a result, within a function, we can determine two things about tis arguments:
+    //   1) How many named parameters it was declared with, via the Function's length property.
+    //   2) How many arguments were passed on the invocation, via arguments.length property
+    function makeNinja(name){}
+    function makeSamurai(name, rank){}
+    assert(makeNinja.length == 1,   'Only expecting a single argument.');
+    assert(makeSamurai.length == 2, 'Two arguments expected.');
+  </script>
+
+  <!-- 4.15 A method-overloading function -->
+  <script>
+    /**
+     * @function
+     * @method addMethod
+     * @param object [ An object upon which a method is to be bound ]
+     * @param name [ The name of the property to which the method will be bound ]
+     * @param fn [ The declaration of the method to be bound ]
+     */
+    function addMethod( object, name, fn ){
+      // Stores the previous function because we may need to call it
+      // if the passed function doesn't have a matching number of arguments
+      var old = object[ name ];
+
+      // Creates a new anonymous function that becomes the method
+      object[ name ] = function(){
+        // Invokes the passed callback function
+        // if its parameter and argument counts match
+        if ( fn.length == arguments.length ){
+          return fn.apply(this, arguments);
+        } else if ( typeof old == 'function' ){
+          // Invoke the previous function if passed function isn't a match
+          return old.apply(this, arguments);
+        }
+      }
+    }
+
+    // Declares an object to serve as the base, preloaded with some test data
+    var ninjas = {
+      values: [ 'Dean Edwards', 'Sam Stephenson', 'Jay Kan' ]
+    };
+
+    // Binds a no-argument method to the base object
+    addMethod( ninjas, 'find', function(){
+      return this.values;
+    });
+
+    // Binds a single-argument method to the base object
+    addMethod( ninjas, 'find', function(name){
+      var ret = [];
+      for ( var i = 0, j = this.values.length; i<j; i++ ){
+        if ( this.values[i].indexOf( name ) == 0 ){
+          ret.push( this.values[i] );
+        }
+      }
+      return ret;
+    });
+
+    // Binds a dual-argument method to the base object
+    addMethod( ninjas, 'find', function(first, last) {
+      var ret = [];
+      for ( var i = 0, j = this.values.length; i<j; i++ ){
+        if ( this.values[i] == ( first + ' ' + last ) ){
+          ret.push( this.values[i] );
+        }
+      }
+      return ret;
+    });
+
+
+  </script>
+
 </body>
 
 </html>
