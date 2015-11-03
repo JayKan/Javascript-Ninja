@@ -241,6 +241,13 @@
       return ret;
     });
 
+    console.log( 'My preloaded Ninjas: ', ninjas.find());
+
+    // Tests the bound methods
+    assert( ninjas.find().length == 3, 'Found all ninjas!' );
+    assert( ninjas.find('Sam').length == 1, 'Found ninja by the first name: Sam');
+    assert( ninjas.find('Dean', 'Edwards').length == 1, 'Found ninja by first && last name: Dean Edwards.');
+    assert( ninjas.find('Jay', 'Kan', 'Jr') == null, 'Found nothing from: Jay Kan Jr');
 
   </script>
 
