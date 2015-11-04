@@ -14,16 +14,39 @@
       /*
         We're going to store a cache of values in property values.
         Here we check to see if we've already created it, and do so if not.
+        NOTE: this step is essential and we must make sure that a data store exists and
+              that it's attached tot the parent function itself.
        */
       this._values = this._values || {};
       /*
         When we get called with a key, we check to see if we have a cached value for it.
         If so, we return it. If not, we call the function and store its values for next time.
+        What's interesting about the proceeding code is that we do the 'computation' and the 'save'
+        in a single step. The value is computed via apply() call to the function, and it's saved directly to the data store.
+        Since this statement, apply() call is within the return statement, meaning that the resulting value is also
+        returned from the parent function. So the entire chain of events - computing the value, saving the value,
+        and returning the value - is done within a single logical unit of code here. (Very interesting!!)
        */
       return this._values[key] !== undefined ?
           this._values[key] :
           this._values[key] = this.apply( this, arguments );
     };
+
+    // We'll compute prime numbers as a test
+    function isPrime(num){
+      var prime = num !== 1;
+      for ( var i = 2; i < num; i++ ){
+        if ( num % i === 0 ){
+          prime = false;
+          break;
+        }
+      }
+      return prime;
+    }
+
+    assert( isPrime.memoized(5), '5.13: The function works; 5 is a prime number.');
+    assert( isPrime._values[5], '5.13: The memoized() function works. The answer 5 has been cached.');
+    //    console.log('Values: ', isPrime._values);
   </script>
 
 </body>
