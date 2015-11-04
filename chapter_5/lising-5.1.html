@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>How Closures Work</title>
   <link rel="stylesheet" href="../common/styles.css">
-  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src="../common/jquery-2.1.4.min.js"></script>
   <script src="../common/simple_test_assertion.js"></script>
 </head>
 
@@ -145,10 +145,26 @@
   <button type="button" id="testButton">Go!</button>
   <!-- 5.5: Using closures from a callback for an Ajax request -->
   <script>
-    jQuery('')
+    // Establishes a 'click' handler on the test button.
+    jQuery('#testButton').click(function(){
 
+      // Declares a variable named element that contains
+      // a reference to the <div> element defined at the top of the code
+      var element = jQuery('#testSubject');
+
+      // Preloads the <div> with some text to let the users
+      // know that something is going on.
+      element.html('Loading something....');
+
+      jQuery.ajax({
+        url: 'test.html',
+        success: function(html){
+          assert( element, 'We can see element, via the closure for this callback.');
+          element.html( html );
+        }
+      })
+    })
   </script>
-
 
 </body>
 
