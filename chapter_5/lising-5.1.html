@@ -6,11 +6,12 @@
   <link rel="stylesheet" href="../common/styles.css">
   <script src="../common/jquery-2.1.4.min.js"></script>
   <script src="../common/simple_test_assertion.js"></script>
+  <style type="text/css">
+    #box { position: absolute; border: 3px solid blue; width: 200px; height: 200px; background-color: #6495ed; font-size: 2em; }
+  </style>
 </head>
 
 <body>
-  <ul id="results"></ul>
-
   <!-- 5.1: A simple closure -->
   <script>
     // NOTE: A closure is the scope created when a function is declared that allows the
@@ -162,8 +163,42 @@
           assert( element, 'We can see element, via the closure for this callback.');
           element.html( html );
         }
-      })
-    })
+      });
+    });
+  </script>
+
+  <!-- 5.6: Using a closure in a timer interval callback -->
+  <div id="box">ボックス</div>
+  <script>
+    function animateIt(elementId){
+
+      // Get reference to the element
+      var elem = document.getElementById( elementId );
+      // Establishes a counter to keep track of animation ticks
+      var tick = 0;
+
+      // Creates and starts an interval timer given a callback function
+      // that will be invoked every 10 milliseconds. For 100 ticks it will
+      // adjust the position of the element
+      var timer = setInterval(function(){
+
+        if ( tick < 200 ){
+          elem.style.left = elem.style.top = tick + 'px';
+          tick++;
+        }else{
+
+          // After 100 ticks we stop the timer and perform
+          // tests to assert relevant variables needed to perform the animation
+          clearInterval(timer);
+
+          assert( tick == 200, '5.6: Tick accessed via a closure!');
+          assert( elem, '5.6: Element also can be accessed via a closure.');
+          assert( timer, '5.6: Timer reference also can be obtained via a closure.');
+        }
+      }, 10);
+    }
+    // Animate my box
+    animateIt( 'box' );
   </script>
 
 </body>
