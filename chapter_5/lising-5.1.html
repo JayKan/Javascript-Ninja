@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>How Closures Work</title>
+  <link rel="stylesheet" href="../common/styles.css">
+  <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  <script src="../common/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <ul id="results"></ul>
+
+  <!-- 5.1: A simple closure -->
+  <script>
+    // NOTE: A closure is the scope created when a function is declared that allows the
+    // function to access and manipulate variables that are external to that function.
+    // Closures allow a function to access all the variables, as well as other functions, that are
+    // in scope when the function itself is declared.
+
+    // Defines a value in global scope
+    var outerValue = 'ninja';
+
+    // Declares a function in global scope
+    function outerFunction(){
+      assert( outerValue === 'ninja', '5.1: I can see the ninja.');
+    }
+
+    // Executes the function
+    outerFunction();
+  </script>
+
+  <!-- 5.2: A not-so-simple closure -->
+  <script>
+
+    var outerValue = 'ninja';
+
+    // Declares an empty variable that we'll use later.
+    var later;
+
+    /**
+     * @function
+     * @method outerFunction
+     */
+    function outerFunction(){
+      // Declares a value inside the function. This variable's scope
+      // is limited to the function and cannot be accessed from outside the function.
+      var innerValue = 'samurai';
+
+      // Declares an innerFunction() within the outerFunction()
+      // Note that innerValue is in scope when we declare this function.
+      function innerFunction(){
+        assert( outerValue, '5.2: I can see the ninja.');
+        assert( innerValue, '5.2: I can see the samurai.');
+      }
+
+      // Stores a reference to the innerFunction() in the later variable.
+      // Because later is in the global scope, it will allow use us to call the function later.
+      // All variables that are in scope at the point of declaration.
+      later = innerFunction;
+    }
+
+    // Invokes the outerFunction(), which causes the innerFunction()
+    // to be declared and its referenced assigned to later.
+    outerFunction();
+
+    // Invokes the innerFunction() through later().
+    later();
+  </script>
+
+  <!-- 5.3: What else closures can see -->
+  <script>
+    var outerValue = 'ninja';
+    var later;
+
+    function outerFunction(){
+      var innerValue = 'samurai';
+
+      // Added a parameter to the innerFunction()
+      function innerFunction( paramValue ){
+        assert( outerValue, '5.3: innerFunction() can see the ninja.');
+        assert( innerValue, '5.3: innerFunction() can see the samurai');
+        // Tests to see innerFunction() can see the paramsValue
+        assert( paramValue, '5.3: innerFunction() can see the paramsValue: ' + paramValue);
+        // Tests to see innerFunction() can see variables that are declared
+        // after the function is declared.
+        assert( tooLate, '5.3: innerFunction() can see the tooLate variable: ronin');
+      }
+
+      // Store innerFunction reference
+      later = innerFunction;
+    }
+
+    // Looks for later value in the same scope.
+    assert( !tooLate, '5.3: Outer cannot see the ronin');
+
+    // Declares a value after the innerFunction() declaration.
+    var tooLate = 'ronin';
+
+    // Invokes outerFunction() so we can call later()
+    outerFunction();
+
+    // Calls the innerFunction() via later() by passing paramsValue
+    later('Jay Kan');
+  </script>
+
+  <!-- 5.4: Using closures to approximate private variables -->
+  <script>
+    // Defines the constructor for a Ninja
+    function Ninja(){
+      // Declares a variable inside the function (constructor).
+      // Because the scope of the variables is limited to inside the constructor, it's a 'private variable'.
+      // We'll use it to count how many times the ninja has feinted.
+      var feints = 0;
+
+      // Creates an accessor method for the feints counter. As the variable
+      // is not accessible to code outside the constructor, this is common way to
+      // give READ-ONLY access to the value
+      this.getFeints = function(){
+        return feints;
+      };
+
+      // Declares the increment method for the value due to private 'feints' variable
+      this.feint = function(){
+        feints++;
+      };
+    }
+
+    // Now for testing; first we construct an instance of Ninja
+    var ninja = new Ninja();
+
+    // Calls the feint() method, which increments the count of the
+    // number of times that our ninja has feinted.
+    ninja.feint();
+
+    assert( ninja.getFeints() === 1,
+        '5.4: We are able to access the internal feint count.');
+    // Even though the constructor has finished executing and gone out of scope,
+    // the feints variable is bound into the closure, created by the declaration of the feint() method
+    assert( ninja.feints === undefined,
+    '5.4: And the private data is inaccessible to us, which is what we want it.');
+  </script>
+
+
+</body>
+
+</html>
