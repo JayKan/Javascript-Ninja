@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Partially applying functions</title>
+  <link type="text/css" rel="stylesheet" href="../common/styles.css">
+  <script type="text/javascript" src="./partial.js"></script>
+  <script type="text/javascript" src="../common/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 5.10: Partially applying arguments to a native function -->
+  <script>
+    // Adds csv() to String.prototype
+    String.prototype.csv = String.prototype.split.partial(/,\s*/);
+
+    // Invokes curried function
+    var results = ('Mugan, Jin, Fuu').csv();
+
+    console.log('Results: ', results);
+    assert( results[0] === 'Mugan' &&
+            results[1] === 'Jin' &&
+            results[2] === 'Fuu',
+    '5.10: The text values were split correctly.');
+  </script>
+
+</body>
+
+</html>
