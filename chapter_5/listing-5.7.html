@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Binding a specific context a function</title>
+  <link rel="stylesheet" href="../common/styles.css">
+  <script src="../common/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- Creates our button here -->
+  <button id="test">Click Me!</button>
+  <!-- 5.7: Binding a specific context a function -->
+  <script>
+    /**
+     * @private
+     * @method
+     * @name bind
+     * @param context
+     * @param name
+     * @description Defines a 'binding' function that wraps a call to the method of an
+     * object within another. This method is designed to create and return a new anonymous function
+     * that calls the original function using apply(), so we can force the context to be whatever object we want.
+     * This particular implementation of a binding function makes the assumption that we're going to using an existing
+     * method of an object (a function attached as a property)
+     */
+    function bind( context, name ){
+      // The anonymous function here serves as the click handler when being invoked.
+      return function(){
+        return context[name].apply( context, arguments );
+      }
+    }
+
+    // Define a object to retain state regarding our button.
+    // With it, we will track whether the button has been clicked or not.
+    var button = {
+
+      // Initial clicked value === false
+      clicked: false,
+
+      // Declares the method that we'll use as the click handler.
+      // Because it's a method of the object, we will use 'this' within
+      // the function to get a reference to current button object.
+      click: function(){
+        this.clicked = true;
+        // Within the method, we test that the button state has been
+        // correctly changed after a clicked.
+        assert( button.clicked, 'The button has been clicked Yay!');
+        console.log(this);
+      }
+    };
+
+    // Establishes the click handler on the button.
+    var element = document.getElementById( 'test' );
+
+    // Click event callback reference
+    var callback = bind( button, 'click' );
+
+    // Uses the binding function to bind the button object
+    // as the context of the handler.
+    element.addEventListener( 'click', callback, false );
+  </script>
+
+  <!-- 5.9: An example of the function-binding code used in the Prototype library -->
+  <script>
+    /*
+      Adds the bind() method to all functions via its prototype.
+     */
+    Function.prototype.bind = function(){
+      var fn      = this,
+          args    = Array.prototype.slice.call( arguments ),
+          object  = args.shift();
+
+      return function(){
+        return fn.apply(object,
+            args.concat( Array.prototype.slice.call( arguments ))
+        );
+      }
+    };
+
+    var myObject = {};
+    function myFunction(){
+      return this == myObject;
+    }
+
+    assert( myFunction(), '5.9: Context is not set for myFunction()...');
+
+    var aFunction = myFunction.bind( myObject );
+
+    assert( aFunction(), '5.9: Context is property set for aFunction()...')
+  </script>
+</body>
+
+</html>

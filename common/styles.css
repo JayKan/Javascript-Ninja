@@ -9,6 +9,7 @@ body {
 }
 #results li.fail {
     color: #F42727;
+    text-decoration: line-through;
 }
 .container {
     padding: 10px 10px;

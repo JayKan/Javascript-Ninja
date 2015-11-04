@@ -183,7 +183,7 @@
       var timer = setInterval(function(){
 
         if ( tick < 200 ){
-          elem.style.left = elem.style.top = tick + 'px';
+          elem.style.left = elem.style.top = tick * 1.5 + 'px';
           tick++;
         }else{
 
@@ -191,7 +191,7 @@
           // tests to assert relevant variables needed to perform the animation
           clearInterval(timer);
 
-          assert( tick == 200, '5.6: Tick accessed via a closure!');
+          assert( tick == 200, '5.6: Tick accessed via a closure AFTER 100 ticks Yay!');
           assert( elem, '5.6: Element also can be accessed via a closure.');
           assert( timer, '5.6: Timer reference also can be obtained via a closure.');
         }
@@ -200,6 +200,8 @@
     // Animate my box
     animateIt( 'box' );
   </script>
+
+
 
 </body>
 
