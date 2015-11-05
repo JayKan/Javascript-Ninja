@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Use immediate functions to solve common loops problems</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <style>
+    div { cursor: pointer;}
+  </style>
+</head>
+
+<body>
+  <div>DIV 0</div>
+  <div>DIV 1</div>
+  <!-- 5.17: Code in which the iterator in the closure doesn't do what you want -->
+  <script>
+    /*
+      Gathers up a list of all <div> elements on the page; two in this case
+     */
+    var divs = document.getElementsByTagName( 'div' );
+
+//    for ( var i = 0, j = divs.length; i < j; i++ ){
+//      divs[i].addEventListener('click', function(){
+        /*
+          We expect each handler to report the DIV number;
+          However, i is always going to be 2 in this case.
+
+          IMPORTANT NOTES:
+          - This is a common issue with closures and looping; namely that the variable
+            that's being closured (i in this case) is being updated after the function is bound.
+            This means that every bound function handler will always alert the last value stored in i, in our case its 2.
+            Closures remember references to included variables - not just their values at the time at which they're created.
+         */
+//        alert('Divs #' + i + ' was clicked.');
+//      }, false);
+//    }
+
+    /*
+      This is the correct working version for above code.
+      How are we ensuring variable i being closured to each loop? (Leverage closures with immediate functions)
+      - By using an immediate function as the body of the for loop, we enforce the correct
+        ordinal value (i) for the handlers by passing that value into the immediate function (and hence, the closure of the inner function).
+        This means that within the scope of each step of the for loop, the 'i' variable is defined
+        anew, giving the closure of the click handler the correct value.
+      - This example clearly points out how we can control the scope of variables and values using immediate functions and closures.
+     */
+    for ( var i = 0, j = divs.length; i < j; i++ ) (function(n){
+      divs[n].addEventListener('click', function(){
+        alert('Divs #' + n + ' was clicked.');
+      }, false)
+    })(i);
+  </script>
+</body>
+
+</html>
