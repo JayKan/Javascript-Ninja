@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Instance Properties</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.2: Observing the precedence of initialization activities -->
+  <script>
+    /*
+      IMPORTANT NOTES:
+      - When the function is called as a constructor via the new operator,
+        its context is defined as teh new object instance.
+      - This means that in addition to 'attaching' properties via the prototype,
+        we can initialize values within the constructor function via the this context.
+      - The precedence of the initialization operations is VERY important concept:
+        1) Properties are 'bound' to the object instance from the prototype.
+        2) Properties are 'added' to the object instance within the constructor function (Takes precedence over attaching via prototype)
+      - Binding operations within the constructor ALWAYS take precedence over those in the prototype.
+        Because the 'this' context within the constructor refers to the instance itself, we can perform
+        initialization actions in the constructor.
+     */
+
+    function Ninja(){
+      /*
+        Creates an instance variable,
+        that holds a boolean value initialized to false.
+       */
+      this.swung = false;
+
+      /*
+        Creates an instance method,
+        that returns the inverse of the swung instance variable value.
+       */
+      this.swingSword = function(){
+        console.log('Instance method gets called.');
+        return !this.swung;
+      }
+    }
+
+    /*
+      Defines a prototype method with the same name as the
+      instance method. We do this on purpose just to see which
+      will take precedence?
+      - We do this to demonstrate the 'precedence of initializers'
+      - Instance method will override the prototype method
+     */
+    Ninja.prototype.swingSword = function(){
+      console.log('Prototype method gets called.');
+      return this.swung;
+    };
+
+    var ninja = new Ninja();
+
+    assert( ninja.swingSword(),
+    '6:2: When Ninja.swingSword() invokes, it demonstrates that the instance method will override prototype method of the same name. Very interesting here!');
+  </script>
+</body>
+
+</html>
