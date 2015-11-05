@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <title>Memoizing funtions using closures techniques</title>
-  <link type="text/css" rel="stylesheet" href="../common/styles.css">
-  <script type="text/javascript" src="../common/simple_test_assertion.js"></script>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
 </head>
 
 <body>
@@ -82,7 +82,9 @@
 
       /*
         'Wraps' original function by creating new function
-        that calls function passed as wrapper.
+        that calls function passed as wrapper. [ Anonymous wrapping function ]
+        The anonymous wrapping function has access to the original function, as
+        well as the passed wrapper function, via the closure.
        */
       return object[method] = function(){
         /*
@@ -93,7 +95,7 @@
         return wrapper.apply( this, [fn.bind(this)].concat(
             Array.prototype.slice.call( arguments )
         ));
-      }
+      };
     }
 
     // Example adapted from Prototype
