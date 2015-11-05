@@ -2,11 +2,57 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Immediate functions</title>
+  <title>Use immediate functions to create temporary variables</title>
   <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/lib/jquery-2.1.4.min.js"></script>
   <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+  <style>
+    img {  cursor: pointer;  }
+    .clickedOn {  border: 5px solid #F42727;  }
+  </style>
 </head>
+
 <body>
 
+  <img src="../common/images/ninja-with-pole.png" alt="Nina with pole">
+  <!-- 5.16: Enforcing the use of a name within an enclosed scope -->
+  <script>
+
+    /*
+      Redefines $ to be something other than jQuery
+     */
+    $ = function(){ alert('not jQuery!'); };
+
+    /*
+      The immediate function expects a single parameter that it names $.
+      Within the function this parameter overrides any use of $ in a higher scope.
+      In other words, within the function body, the parameter $ will take precedence over
+      the global variable $, which we have redefines above.
+
+      What Immediate Functions can help && do:
+        - Creates a function instance
+        - Executes the function
+        - Discards the function (as there are no longer any references to it after the statement has ended)
+        - Creates temporary variables within a scope (short name into a limited scope)
+        - Solves nasty issues with loops and closures
+     */
+    (function($){
+      /*
+        Inside the function we use the $ as if it were still assigned to jQuery.
+        Note that we not only use the $ in the function, we also use it in the event handler.
+        Even though the event handler will be called much later, the $ parameter is bound
+        to it by its closure. [ Awesome closure !!! ]
+       */
+      $('img').on('click', function(event){
+        $(event.target).addClass('clickedOn');
+      });
+      /*
+        In calling the immediate function, we pass jQuery as the sole argument.
+        This binds jQuery to the $ parameter; thus innerFunction can have access to $ (jQuery)
+       */
+    })(jQuery);
+
+  </script>
 </body>
+
 </html>
