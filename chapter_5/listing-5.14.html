@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Memoizing funtions using closures techniques</title>
+  <link type="text/css" rel="stylesheet" href="../common/styles.css">
+  <script type="text/javascript" src="../common/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 5.14: A technique for memoizing functions using closures -->
+  <script>
+    Function.prototype.memoized = function(key){
+      this._values = this._values || {};
+      return this._values[key] !== undefined ?
+          this._values[key] :
+          this._values[key] = this.apply( this, arguments );
+    };
+
+    Function.prototype.memoize = function(){
+      /*
+        Brings the context into the closure by assigning it to a variable.
+        Otherwise, the context is lost, as 'this' is never part of a closure.
+      */
+      var fn = this;
+      /*
+        - Wraps original function in memoization function
+        - This eliminates the need for the caller to apply memoized() themselves
+      */
+      return function(){
+        return fn.memoized.apply( fn, arguments );
+      };
+    };
+
+    /*
+
+    */
+    var isPrime = (function(num){
+      var prime = num !== 1;
+      for ( var i = 2; i<num; i++ ){
+        if ( num % i === 0 ){
+          prime = false;
+          break;
+        }
+      }
+      return prime;
+    }).memoize();
+
+    /*
+      The function isPrime() is called just like it
+      would normally be - the caller doesn't need to
+      be aware of memoization augmentation.
+     */
+    assert( isPrime(17), '5.14: 17 is a prime number!');
+  </script>
+
+  <!-- 5.15: Wrapping an old function with a new piece of functionality -->
+  <script>
+    /*
+      NOTES: Function wrapping is a technique for encapsulating the logic of a function while
+      overwriting it with new or extended functionality in a single step. It's best used when we wish to
+      override some previous behavior of a function, while still allowing certain use cases to execute.
+     */
+
+    /**
+     * @private
+     * @name wrap
+     * @description Defines a generic wrapping function, taking as parameters an object whose method
+     is to be wrapped, name of object method to be wrapped, and function to be executed
+     in place of original method
+     * @param object [ an object whose method is to be wrapped ]
+     * @param method [ name of object method to be wrapped ]
+     * @param wrapper [ callback function to be executed in place of original method ]
+     */
+    function wrap( object, method, wrapper ){
+
+      /*
+        Remembers original function reference so that
+        we can later reference it via a closure.
+       */
+      var fn = object[ method ];
+
+      /*
+        'Wraps' original function by creating new function
+        that calls function passed as wrapper.
+       */
+      return object[method] = function(){
+        /*
+          Within new function, wrapper function is called with apply(),
+          forcing function context to object and passing as arguments the original
+          method using bind() to force its function context to object and original arguments.
+         */
+        return wrapper.apply( this, [fn.bind(this)].concat(
+            Array.prototype.slice.call( arguments )
+        ));
+      }
+    }
+
+    // Example adapted from Prototype
+    if ( Prototype.Browser.Opera ){
+
+      wrap(Element.methods, 'readAttribute', function(original, element, attr){
+        return attr === 'title' ?
+            element.title :
+            original( element, attr );
+      });
+    }
+
+  </script>
+</body>
+
+</html>
