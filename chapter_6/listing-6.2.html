@@ -8,6 +8,7 @@
 </head>
 
 <body>
+
   <!-- 6.2: Observing the precedence of initialization activities -->
   <script>
     /*
@@ -17,8 +18,8 @@
       - This means that in addition to 'attaching' properties via the prototype,
         we can initialize values within the constructor function via the this context.
       - The precedence of the initialization operations is VERY important concept:
-        1) Properties are 'bound' to the object instance from the prototype.
-        2) Properties are 'added' to the object instance within the constructor function (Takes precedence over attaching via prototype)
+         1) Properties are 'bound' to the object instance from the prototype.
+         2) Properties are 'added' to the object instance within the constructor function (Takes precedence over attaching via prototype)
       - Binding operations within the constructor ALWAYS take precedence over those in the prototype.
         Because the 'this' context within the constructor refers to the instance itself, we can perform
         initialization actions in the constructor.

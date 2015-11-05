@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Reconciling Prototype References</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.3: Observing the behavior of changes to the prototype -->
+  <script>
+    /*
+      Defines a constructor that creates a Ninja
+      with a single boolean property
+     */
+    function Ninja(){
+      this.swung = true;
+    }
+
+
+    var ninja = new Ninja();
+
+    /*
+      Adds 'swingSword' method after Ninja instance has been constructed
+     */
+    Ninja.prototype.swingSword = function(){
+      return this.swung;
+    };
+
+    /*
+      Clearly there's more to all than a simple copying of
+      properties when the object is created even though 'swingSword'
+      was added after ninja was created!
+
+      What's going on here?
+      - Properties in the prototype aren't copied anywhere, but rather,
+        the prototype is 'attached' to the constructed object and consulted during
+        the reconciling of property references made to the object.
+     */
+    assert( ninja.swingSword(),
+    '6.3: Method exists. Surprisingly even out of order, I know!');
+  </script>
+</body>
+
+</html>
