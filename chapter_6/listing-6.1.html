@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Object-orientation with prototypes</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+
+  <!-- 6.1: Creating a new instance with a prototyped method -->
+  <script>
+    /*
+      IMPORTANT NOTES:
+       - Prototypes are a convenient way to define types of objects, but they're actually a feature of functions!
+       - A prototype is used as a 'blueprint' for the newly created object instances when the function is used as a 'Constructor'!!
+       - A prototype lets us predefine properties, including methods, to be automatically applie to new object instances.
+       - Indeed, prototypes serve a similar purpose to that of classes in classical object-oriented languages.
+       - All functions have a 'prototype' property that INITIALLY references an empty object. This property doesn't
+         serve much purpose until the function is used as a constructor!
+     */
+
+    /*
+      Defines a function that does nothing and returns nothing.
+     */
+    function Ninja(){}
+
+    /*
+      Adds 'swingSword' method to the prototype of the function.
+      'singSword' method is attached to the new object simply by adding it to the constructor's prototype property.
+     */
+    Ninja.prototype.swingSword = function(){
+      return true;
+    };
+
+    /*
+      Calls the function as a function (without using new operator).
+      Testing confirms that nothing at all seems to happen.
+      This example shows invoking as a normal function.
+     */
+    var ninja1 = Ninja();
+
+    assert( ninja1 === undefined, '6.1: No instance of Ninja created.');
+
+    /*
+      Call the function as a Constructor. (using new operator!)
+      Testing confirms that not only is new object instance created, but also it
+      possesses the method from the prototype of the function. (Exactly what we want!!!)
+       - This example shows invoking as a Constructor ( differ than above invoking as a function for sure)
+       - This shows that the function's prototype servers as a sort of 'blueprint' for the new object.
+     */
+    var ninja2 = new Ninja();
+    assert( ninja2 &&
+            ninja2.swingSword &&
+            ninja2.swingSword(),
+            '6.1: Instance exists and method is callable!!!!');
+  </script>
+</body>
+
+</html>
