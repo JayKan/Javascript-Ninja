@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>A future-proof JavaScript forEach() method implementation</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.9: A future-proof JavaScript forEach() method implementation -->
+  <script>
+
+    if ( !Array.prototype.forEach ){
+      Array.prototype.forEach = function( callback, context ){
+        for ( var i = 0, j = this.length; i < j; i++ ){
+          /*
+            Calls the callback function for each array entry
+           */
+          callback.call( context || null, this[i], i, this);
+        }
+      };
+
+      [ 'a', 'b', 'c'].forEach(function(value, index, array ){
+        /*
+          Puts our forEach() implementation to test
+         */
+        assert(value,
+        'Value: ' + value + ' -> is in position ' + index + ' out of ' + ( array.length - 1) );
+      });
+    }
+  </script>
+</body>
+
+</html>
