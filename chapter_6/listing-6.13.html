@@ -39,13 +39,11 @@
 
       - When trying to load 3rd example with literal format, the page won't even load (so commented out)
         It turns out that the syntax parser can't handle the literal case.
+
+      - In general, it's best to avoid mucking around the Number prototype unless you really have to.
      */
 //    assert( 5.add(3) == 8,
-//    'What a simple literal?');
-
-
-
-
+//    'Nope, it won't work due to parser can't handle the literal case. What a simple literal?');
   </script>
 </body>
 

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pitfall subclassing native Object</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.14: Subclassing the Array Object -->
+  <script>
+
+    function MyArray(){}
+
+    MyArray.prototype = new Array();
+
+    var mine = new MyArray();
+    mine.push(1, 2, 3);
+
+    assert( mine.length === 3,
+    '6.14: All the items are in our sub-classed array.');
+
+    assert( mine instanceof Array,
+    '6.14: Verify that we implement Array functionality.');
+  </script>
+</body>
+
+</html>

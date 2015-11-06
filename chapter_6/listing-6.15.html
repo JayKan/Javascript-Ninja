@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add array functionality without the true subclassing</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.15: Simulating Array functionality without the true subclassing -->
+  <script>
+
+    /*
+      Defines a new 'class' with a prototyped length property.
+     */
+    function MyArray(){}
+    MyArray.prototype.length = 0;
+
+    /*
+      Rather than trying to subclass Array, which we've already learned won't work
+      across all browsers, we use an immediate function to add selected methods from
+      Array to our class during the apply() trick.
+     */
+    (function(){
+      var methods = [
+          'push',
+          'pop',
+          'shift',
+          'unshift',
+          'slice',
+          'splice',
+          'join'
+      ];
+      for ( var i = 0, j = methods.length; i < j; i++ ) (function(name){
+        MyArray.prototype[ name ] = function(){
+          return Array.prototype[ name].apply( this, arguments );
+        };
+      })(methods[i]);
+    })();
+
+    var mine = new MyArray();
+    mine.push( 1, 2, 3 );
+
+    assert( mine.length === 3,
+    '6.15: All the items are on our sub-classed array.');
+
+    assert( !(mine instanceof Array),
+    '6.15: However, we aren\'t subclassing Array, though!');
+  </script>
+</body>
+
+</html>
