@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Extending Object</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.11: Unexpected behavior of adding extra properties to the Object.prototype -->
+  <script>
+
+    /*
+      Defines a new method in the Object prototype
+     */
+    Object.prototype.keys = function(){
+      var keys = [];
+      for ( var p in this ) {
+        keys.push(p);
+      }
+      return keys;
+    };
+
+    /*
+      Creates an object to test
+     */
+    var obj = {
+      a: 1,
+      b: 2,
+      c: 3
+    };
+
+    console.log( obj.keys() );
+    /*
+      Tests the new method by checking the length of the array
+      object.keys() actually returns you [ 'a', 'b', 'c', 'keys' ].length === 4
+     */
+    assert( obj.keys().length === 3,
+    'There are 3 properties in this object.');
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Using hasOwnProperty() to tame object prototype</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.12: Using the hasOwnProperty() method to tame Object prototype extensions -->
+  <script>
+
+    /*
+      IMPORTANT NOTES:
+
+      - hasOwnProperty() method returns a boolean indicating whether object
+        the object has teh specified property. This method can be used to
+        determine whether properties are actually defined on an object
+        instance vs. imported from a prototype.
+     */
+    Object.prototype.keys = function(){
+      var keys = [];
+      for ( var key in this ){
+        /*
+          Ignores prototyped properties by using hasOwnProperty()
+          to skip over properties from the prototype
+         */
+        if ( this.hasOwnProperty( key ) ){
+          keys.push( key );
+        }
+      }
+      return keys;
+    };
+
+    var obj = {
+      a: 1,
+      b: 2,
+      c: 3
+    };
+
+    assert( obj.keys().length === 3,
+    '6.12: There are ONLY 3 properties in this object!');
+  </script>
+</body>
+
+</html>
