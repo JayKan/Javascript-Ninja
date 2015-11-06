@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Instantiating a new object using a reference to a constructor</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.6: Instantiating a new object using a reference to a constructor -->
+  <script>
+
+    function Ninja(){}
+
+    var ninja1 = new Ninja();
+
+    /*
+      Constructs a second Ninja from the
+      first ninja1's constructor reference (very interesting here!!)
+     */
+    var ninja2 = new ninja1.constructor();
+
+    /*
+      Proves the ninja2 is an instance of Ninja,
+      even though ninja2 was created via ninja1.constructor() reference.
+     */
+    assert( ninja2 instanceof Ninja,
+    '6.6: ninja2 instance is a Ninja!!');
+
+    /*
+      They aren't the same object even though ninja2 was created via ninja1,
+      but two distinct/unique instances!!
+     */
+    assert( ninja1 !== ninja2,
+    '6.6: They are not the same Ninja, but two distinct instances!');
+  </script>
+</body>
+
+</html>

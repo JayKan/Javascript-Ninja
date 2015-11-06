@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Observing Changes to Prototypes</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.4: Further observing the behavior of changes to the prototype -->
+  <script>
+
+    function Ninja(){
+      this.swung = true;
+      /*
+        Defines an instance method with same name as a prototype method
+       */
+      this.swingSword = function(){
+        return !this.swung;
+      };
+    }
+
+    var ninja = new Ninja();
+
+    /*
+      Defines a prototyped method with same name as the instance method
+     */
+    Ninja.prototype.swingSword = function(){
+      return this.swung;
+    };
+
+    /*
+      Again, the instance method 'swingSword()' takes precedence. This makes
+      perfect sense since the prototype is only consulted when a property reference
+      on the object itself fails! Because the object itself directly possesses a 'swingSword'
+      property, the prototyped version doesn't come into play.
+
+      IMPORTANT NOTES:
+      - Property references are resolved in the object first, defaulting to inspecting the
+        prototype only if that fails.
+     */
+    assert( ninja.swingSword(),
+    '6.4: Called the instance method, not the prototype method!');
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Object typing via Constructors</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.5: Examining the type of an instance and its constructor -->
+  <script>
+
+    // Defines a constructor
+    function Ninja(){}
+
+    var ninja = new Ninja();
+
+    /*
+      Tests the type of ninja using typeof.
+      That tells us it's an object, not much else though :(
+     */
+    assert( typeof ninja === 'object',
+    '6.5: The type of the instance is an object.');
+
+    /*
+      Tests the type of ninja using 'instanceof'. This gives us
+      more information - that it was constructed from Ninja.
+
+      - instanceof operator gives us a clear way to determine whether
+        an instance was created by a particular function constructor or not.
+     */
+    assert( ninja instanceof Ninja,
+    '6.5: instanceof identifies the constructor.');
+
+    /*
+      Tests the type of ninja using the constructor reference. This
+      gives us an actual reference to the constructor function.
+
+      - Since constructor property was added to all instances, we can
+        use constructor property to verify the origin of the instance ( much like instanceof )
+     */
+    assert( ninja.constructor === Ninja,
+    '6.5: The ninja object was created by the Ninja function.');
+  </script>
+
+</body>
+
+</html>

@@ -37,6 +37,10 @@
       - Properties in the prototype aren't copied anywhere, but rather,
         the prototype is 'attached' to the constructed object and consulted during
         the reconciling of property references made to the object.
+      - Each object in JavaScript has an implicit property named 'constructor' that references
+        the constructor that was used to create the object
+      - Prototype is a property of the constructor. [ Object -> Constructor -> Prototype (Constructor.prototype) ]
+      - The prototype is actively 'attached' to the object, and any references made to the object properties are reconciled, at the time of reference.
      */
     assert( ninja.swingSword(),
     '6.3: Method exists. Surprisingly even out of order, I know!');
