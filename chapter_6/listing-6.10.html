@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HTML DOM Prototypes</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+
+  <div id="parent">
+    <div id="a">I'm going to be removed.</div>
+    <div id="b">Me too, haha!</div>
+  </div>
+
+  <!-- 6.10: Adding a new method to all HTML elements via the HTMLElement prototype -->
+  <script>
+
+    /*
+      IMPORTANT NOTES:
+
+      - Since all DOM elements inherit from an HTMLElement constructor in modern browsers,
+        including IE8+, Firefox, Safari and Opera. By making the HTMLElement prototype accessible,
+        the browsers provide us with the ability to extend any HTML node for our choosing!!
+
+      - HTMLElement.prototype don't exist in versions of IE prior to IE8
+     */
+
+    /*
+      Adds a new method to all elements by adding it to the HTMLElement prototype
+     */
+    HTMLElement.prototype.remove = function(){
+      if ( this.parentNode ){
+        this.parentNode.removeChild( this );
+      }
+    };
+
+    /*
+      Code that does it old-fashioned way
+     */
+    var a = document.getElementById( 'a' );
+    a.parentNode.removeChild( a );
+
+    /*
+      Remove using our newly remove() method
+     */
+    document.getElementById( 'b' ).remove();
+
+    assert( !document.getElementById( 'a' ), '6.10: Element [a] is removed via old-fashioned way!');
+    assert( !document.getElementById( 'b' ), '6.10: Element [b] is removed via our newly remove() method!');
+
+  </script>
+</body>
+
+</html>
