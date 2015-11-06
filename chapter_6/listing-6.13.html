@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pitfall when extending numbers</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+
+  <!-- 6.13: Adding a method to the number prototype -->
+  <script>
+
+    /*
+      Defines a new method on the Number prototype
+     */
+    Number.prototype.add = function(num){
+      return this + num;
+    };
+
+
+    var n = 5;
+
+    /*
+      Tests the method using a variable
+     */
+    assert(n.add(3) === 8,
+    'It works when the number is in a variable [reference].');
+
+    /*
+      Tests the method using an expression format (wrapped in parentheses)
+     */
+    assert( (5).add(3) === 8,
+    'Also works if a number is wrapped in parentheses.');
+
+    /*
+      Tests the method using a literal format.
+
+      - When trying to load 3rd example with literal format, the page won't even load (so commented out)
+        It turns out that the syntax parser can't handle the literal case.
+     */
+//    assert( 5.add(3) == 8,
+//    'What a simple literal?');
+
+
+
+
+  </script>
+</body>
+
+</html>
