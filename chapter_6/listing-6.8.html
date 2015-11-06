@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Achieving inheritance with Prototypes</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.8: Achieving inheritance with prototypes -->
+  <script>
+
+    function Person(){}
+    Person.prototype.dance = function(){};
+
+    function Ninja(){}
+    /*
+      Makes a Ninja a Person by making the Ninja prototype
+      an instance of Person.
+
+      NOTE:
+      - To achieve inheritance, we can assign Ninja's prototype to be the instance of Person.
+      - inheritance is achieved via prototype inheritance
+     */
+    Ninja.prototype = new Person();
+
+    var ninja = new Ninja();
+
+    assert( ninja instanceof Ninja,
+    '6.8: ninja should be an instanceof Ninja. This one is very obvious.');
+
+    assert( ninja instanceof Person,
+    '6.8: ................... ninja should be also an instanceof person due to ninja\'s prototype.');
+
+    assert( ninja instanceof Object,
+    '6.8: ................... ninja should be also an instance of Object. Obvious one here.');
+
+    assert( typeof ninja.dance === 'function',
+    '6.8: ................... ninja of course can dance() as well.');
+  </script>
+</body>
+
+</html>

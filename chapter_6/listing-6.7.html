@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Inheritance and the prototype chain</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.7: Trying to achieve inheritance with prototypes -->
+  <script>
+    /*
+      Defines a dancing Person via a constructor and its prototype
+     */
+    function Person(){}
+    Person.prototype.dance = function(){};
+
+    /*
+      Defines a Ninja
+     */
+    function Ninja(){}
+
+    /*
+      Attempts to make a Ninja a dancing Person by
+      copying the dance method from the Person prototype
+     */
+    Ninja.prototype = {
+      dance: Person.prototype.dance
+    };
+
+    var ninja = new Ninja();
+
+    /*
+      - instanceof operator: determines whether an instance was created by
+      a particular function constructor or not. (very helpful)
+
+      Tests whether ninja was created via Ninja (of course in this case)
+     */
+    assert( ninja instanceof Ninja,
+    '6.7: ninja of course is an instanceof Ninja, and ninja receives functionality from the Ninja prototype!!');
+
+    assert( ninja instanceof Person,
+    '6.7: .............. and the Person prototype?');
+
+    /*
+      All objects are instances of Object, hmm.....
+     */
+    assert( ninja instanceof Object,
+    '6.7: .............. and the Object prototype?');
+
+  </script>
+</body>
+
+</html>
