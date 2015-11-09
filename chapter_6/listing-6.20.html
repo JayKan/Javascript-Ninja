@@ -9,15 +9,71 @@
 </head>
 
 <body>
+
   <!-- 6.20: An example of somewhat classical-style inheritance style -->
   <script>
     /*
       Creates a Person class as a subclass of Object by using a
       subclass() method that we'll end up implementing.
      */
-//    var Person = Object.subClass({
-//
-//    })
+    var Person = Object.subClass({
+      init: function( isDancing ){
+        this.dancing = isDancing;
+      },
+      dance: function(){
+        return this.dancing;
+      }
+    });
+
+    /*
+      Creates the Ninja Class by subClassing from Person.
+     */
+    var Ninja = Person.subClass({
+      /*
+        We need a way to call the superClass constructor - here's how we'll do it.
+        init() method calls _super() Class method.
+       */
+      init: function(){
+        this._super( false );
+      },
+      dance: function(){
+        /*
+          This is Ninja specific stuff.
+         */
+        return this._super();
+      },
+      swingSword: function(){
+        return true;
+      }
+    });
+
+    /*
+      Tests the Person class by creating an instance
+      and seeing if it works.
+     */
+    var person = new Person();
+    assert( person.dance(),
+    '6.20: The person is dancing.');
+
+    /*
+      Tests the Ninja class by creating an instance
+      and checking that it has both the swingSword()
+      and the inherited dance() method.
+     */
+    var ninja = new Ninja();
+    assert( ninja.swingSword(),
+    '6.20: The sword is swinging!.');
+    assert( !ninja.dance(),
+    '6.20: The ninja is not dancing!');
+
+    /*
+      Performs instanceof tests to test
+      the class hierarchy!
+     */
+    assert( person instanceof Person,
+    '6.20: Person is a person.');
+    assert( ninja instanceof Ninja && ninja instanceof Person,
+    '6.20: The Ninja is a ninja and a Person.');
   </script>
 </body>
 

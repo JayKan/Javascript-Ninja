@@ -1,19 +1,34 @@
 ;(function(){
 
-  var initializing  = false,
-      supperPattern = // Determine if functions can serialized
-        /xyz/.test(function() { xyz; }) ? /\b_super\b/ : /.*/;
+  /*
+    NOTES:
+    - Function serialization: is simply the act of taking a function and getting
+      its text source back.
+    - In most modern browsers, the function's toString() method will do the trip.
+      In general, a function is serialized by using it in a context that expects a string,
+      causing its toString() method to be invoked.
+   */
+  var initializing  = false;
+
+  /*
+    supperPattern() used to determine if functions can serialized or not.
+    This establishes a variable named supperPattern that we'll use later to
+    check if a function contains the string '_super'
+   */
+  var supperPattern = /xyz/.test(function() { xyz; }) ? /\b_super\b/ : /.*/;
 
   /*
     Creates a new class that inherits from this class.
     Adds a subClass() method to Object as a static method.
+    - maintains simple inheritance
+    - allows for the super method calling.
    */
   Object.subClass = function( properties ){
 
     var _super = this.prototype;
 
     /*
-      Instantiates the superClass
+      Initialization the superClass.
      */
     initializing = true;
     var proto = new this();
@@ -22,14 +37,25 @@
 
     /*
       Copies properties into the prototype.
+      But before we can do that, we need to detect the condition under
+      which we need wrap the subclass function.
      */
     for ( var name in properties ){
-
-      proto[ name ] = typeof properties[ name ] == 'function' &&
-                      typeof _super[ name ] == 'function' &&
+      /*
+        - Is the subClass property a function?
+        - Is the superClass property a function?
+        - Does the subClass function contain a reference to _super()?
+       */
+      proto[ name ] = typeof properties[ name ] === 'function' &&
+                      typeof _super[ name ] === 'function' &&
                       supperPattern.test( properties[name] ) ?
         /*
           Defines an overriding function if proto[name] === true.
+          - ONLY if all three clauses are true do we need to do anything other
+            than copy the property value.
+          - This immediate function creates and returns a new function that wraps
+            and executes the subClass function while making the superclass function
+            available via the _super property.
          */
         (function(name, fn){
           return function(){
