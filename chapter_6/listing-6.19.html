@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fixing things on the caller's behalf</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.19: Fixing things on the caller's behalf -->
+  <script>
+    /*
+      NOTES:
+      - Arguments.callee:
+         - We can use arguments.callee to get a reference to the correctly executing function.
+         - Use it to determine function constructor (very helpful in this case)
+      - instanceof : The instanceof operator can be used to test for its constructor
+     */
+
+    /*
+      Fixes things up if we determine that we were called
+      incorrectly by calling ourselves in the correct manner.
+     */
+    function User( first, last ){
+      if ( !( this instanceof arguments.callee )) {
+        return new User( first, last );
+      }
+      this.name = first + ' ' + last;
+    }
+
+    var name = 'Rukia';
+
+    /*
+      Calls the constructor INCORRECTLY again!
+     */
+    var user = User( 'Jay', 'Kan' );
+
+    /*
+      Verifies that the fix works
+     */
+    assert( name === 'Rukia',
+    '6.19: Name was set to Rukia.');
+
+    assert( user instanceof User,
+    '6.19: User gets instantiated correctly!.');
+
+    assert( user.name === 'Jay Kan',
+    '6.19: User name gets assigned correctly too!.');
+  </script>
+
+</body>
+
+</html>

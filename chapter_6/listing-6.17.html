@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+
+  <!-- 6.17: Accidentally introducing a variable into the global namespace -->
+  <script>
+    function User( first, last ){
+      this.name = first + ' ' + last;
+    }
+
+    /*
+      Creates a global variable
+     */
+    var name = 'Rukia';
+
+    /*
+      Calls the constructor incorrectly again.
+     */
+    var user = User( 'Jay', 'Kan' );
+
+    console.log(name);
+    assert( name === 'Rukia',
+    '6.17: Name was set to global Rukia instead of Jay Kan.');
+  </script>
+
+</body>
+</html>
