@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Capturing matching segments</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+
+  <!-- Defines the test subject -->
+  <div id="opacity" style="opacity:0.5;filter:alpha(opacity=50);">
+  </div>
+
+
+  <!-- 7.4: A simple function for capturing an embedded value -->
+  <script>
+
+    function getOpacity( element ){
+      var filter = element.style.filter;
+      /*
+        Decides what to return.
+       */
+      return filter ?
+          filter.indexOf( 'opacity=' ) >=0 ?
+              ( parseFloat( filter.match(/opacity=([^)]+)/)[1]) / 100 ) + '':
+              '':
+          element.style.opacity;
+    }
+
+    window.onload = function(){
+
+      assert(
+          getOpacity( document.getElementById( 'opacity' )) == 0.5,
+          '7.4: The opacity of the element has been obtained.'
+      );
+    };
+
+  </script>
+</body>
+
+</html>

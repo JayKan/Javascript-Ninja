@@ -3,6 +3,9 @@ body {
 }
 #results {
     border: 2px solid black;
+    background-color: #ffffcc;
+    padding: 0.25em 1.5em;
+    margin-left: 0;
 }
 #results li.pass {
     color: green;

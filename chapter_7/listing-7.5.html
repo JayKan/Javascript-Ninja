@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Matching using global expressions</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 7.5: Differences between a global and local search with match() -->
+  <script>
+
+    /*
+      Matches using a local regex
+     */
+    var html = "<div class='test'><b>Hello</b> <i>world!</i></div>";
+    var results = html.match( /<(\/?)(\w+)([^>]*?)>/ );
+
+    console.log('Matched Results array: ', results );
+
+    assert( results[0] == "<div class='test'>",
+    '7.5: The entire match.');
+
+    assert( results[1] == '',
+    '7.5: The (missing) slash.');
+
+    assert( results[2] == 'div',
+    '7.5: The tag name.');
+
+    assert( results[3] == ' class=\'test\'',
+    '7.5: The attributes.');
+
+    /*
+      - Matches all using a global regex.
+      - When we use a global match (/g), it returns the list of matches.
+     */
+    var all = html.match(/<(\/?)(\w+)([^>]*?)>/g);
+
+    console.log('All matched Results: ', all);
+
+    assert( all[0] == '<div class=\'test\'>',
+    '7.5: Opening div tag.');
+
+    assert( all[1] == '<b>',
+    '7.5: Opening b tag.');
+
+    assert( all[2] == '</b>',
+    '7.5: Closing b tag.');
+
+    assert( all[3] == '<i>',
+    '7.5: Opening i tag.');
+
+    assert( all[4] == '</i>',
+    '7.5: Closing i tag.');
+
+    assert( all[5] == '</div>',
+    '7.5: Closing div tag.');
+  </script>
+</body>
+
+</html>
