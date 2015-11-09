@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Compiling a runtime regular expression for later use</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+
+  <!-- Creates test subjects of various elements with various class names -->
+  <div class="samurai ninja"></div>
+  <div class="ninja samurai"></div>
+  <div></div>
+  <span class="samurai ninja ronin"></span>
+
+  <!-- 7.3: Compiling a runtime regular expression for later use -->
+  <script>
+
+    function findClassInElements( className, type ){
+
+      /*
+        Collects elements by type
+       */
+      var elems =
+          document.getElementsByTagName( type || '*' );
+
+      /*
+        Compiles a regex using the passed className
+       */
+      var regex =
+          new RegExp( '(^|\\s)' + className + '(\\s|$)');
+
+      /*
+        Stores the results.
+       */
+      var results = [];
+
+      for ( var i = 0, j = elems.length; i < j; i++ ){
+        /*
+          Tests for regex matches
+         */
+        if ( regex.test( elems[i].className ) ){
+
+          results.push( elems[i] );
+        }
+      }
+
+      return results;
+    }
+
+    assert( findClassInElements( 'ninja', 'div' ).length === 2,
+    '7.3: The right amount of div ninjas was found.');
+
+    assert( findClassInElements( 'ninja', 'span' ).length === 1,
+    '7.3: The right amount of span ninjas was found.');
+
+    assert( findClassInElements( 'ninja').length === 3,
+    '7.3: The right amount of ninjas was found.');
+  </script>
+
+</body>
+
+</html>

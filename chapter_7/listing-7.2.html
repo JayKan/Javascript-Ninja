@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Two ways to create a compiled regular expression</title>
+  <link rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 7.2: Two ways to create a compiled regular expression -->
+  <script>
+    /*
+      - Creates a regex via a literal (#1 way)
+      - flag i -> regex case-insensitive
+     */
+    var re1 = /test/i;
+
+    /*
+      - Creates a regex via the constructor (#2 way).
+      - This technique (via the regex constructor) allows to build and compile an
+        expression from a string that we can dynamically create at runtime. This can
+        be immensely useful for constructing complex expressions.
+     */
+    var re2 = new RegExp('test', 'i');
+
+    assert( re1.toString() === '/test/i',
+    '7.2: Verify the contents of the expression.');
+    assert( re1.test( 'Test' ),
+    '7.2: Yes, it\'t case-insensitive.');
+    assert( re2.test( 'Test'),
+    '7.2: This one is too.');
+    assert( re1.toString() === re2.toString(),
+    '7.2: The regular expression are equal using toString() method.');
+    assert( re1 !== re2,
+    '7.2: However they are different objects though!');
+  </script>
+</body>
+
+</html>

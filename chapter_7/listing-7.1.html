@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wrangling Regular Expressions</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+
+  <!-- 7.1: Testing for a specific pattern in string -->
+  <script>
+    /*
+      IMPORTANT NOTES:
+      - Regular expressions trivialize the process of tearing apart strings and looking
+        for information.
+      - Regular expression is simply a way to express a 'pattern' for matching strings of texts.
+      - Regex literals are delimited using forward slashes in the way that string literals are delimited
+        with quote characters.
+      - Powerful usage of Regular expressions:
+        1) Manipulating strings of HTML nodes.
+        2) Locating partial selectors within a CSS selector expression.
+        3) Determine if an element has a specific class name.
+        4) Extracting the opacity from IE's filter property.
+      - To express an actual backslash in regex, you have use \\ (double backslashes)
+      - In addition to the expression itself, there are 3 flags that can be associated with a regex:
+        1) i -> Makes the regex case-insensitive, so /test/i matches not only 'test', but also 'Test', 'TEST', 'tEsT' and etc.
+        2) g -> Matches all instances of the pattern, as opposed to the default of 'local', which
+               matches ONLY the FIRST occurrence.
+        3) m -> Allows matches across multiple lines.
+        Those 3 flags (i, g, or m) are appended to the END of the literal or passed in a string as the 2nd argument.
+      - Alternatives can be expressed using the | (pipe) character.
+     */
+    function isThisAZipCode( candidate ){
+      if ( typeof candidate !== 'string' ||
+           candidate.length !== 10 ) return false;
+
+      for ( var n = 0, j = candidate.length; n < j; n++ ){
+        var c = candidate[ n ];
+
+        /*
+          Performs test based upon character index
+         */
+        switch ( n ) {
+          case 0:case 1:case 2:case 3:case 4:
+          case 6:case 7:case 8:case 9:
+            if ( c < '0' || c > '9' ) return false;
+            break;
+          case 5:
+            if ( c !== '-' )return false;
+            break;
+        }
+      }
+
+      /*
+        If all succeeded, we're good!
+       */
+      return true;
+    }
+  </script>
+</body>
+
+</html>
