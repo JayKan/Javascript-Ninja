@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dealing Instantiation Issues</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 6.16: The result of leaving off the new operator from a function call -->
+  <script>
+
+    /*
+      Defines a user Class with a name property
+     */
+    function User( first, last ){
+      this.name = first + ' ' + last;
+    }
+
+    var user = User('Jay', 'Kan');
+
+    /*
+     Tests that the object is instantiated
+     */
+    assert( user,
+    'User is instantiated!');
+
+    /*
+      Tests that the constructor property assigned the name
+     */
+//    assert( user.name === 'Jay Kan',
+//    'User name correctly assigned.');
+
+    function Test(){
+      console.log( this instanceof arguments.callee);
+      console.log(arguments);
+      return this instanceof arguments.callee;
+    }
+
+    assert( !Test(),
+    'We didn\'t instantiate, so it returns false.');
+
+    assert( new Test(),
+    'We did instantiate, returning true.');
+
+
+  </script>
+
+</body>
+
+</html>
