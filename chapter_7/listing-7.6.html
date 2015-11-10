@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Listing 7.6</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 7.6: Using the exec() method to do both capturing and a global search -->
+  <script>
+
+    var html = "<div class='text'><b>Hello</b> <i>world</i></div>";
+    var tag  = /<(\/?)(\w+)([^>]*?)>/g, match;
+    var num  = 0;
+
+    /*
+      Repeatedly calls exec()
+     */
+    while ( (match = tag.exec( html )) !== null ){
+      assert( match.length == 4,
+      '7.6: Every match finds each tag and 3 captures.');
+      num++;
+    }
+
+    assert( num == 6,
+    '7.6: 3 opening and 3 closing tags found.');
+  </script>
+
+</body>
+
+</html>

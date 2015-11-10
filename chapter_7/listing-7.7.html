@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Listing 7.7</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 7.7: Using back references to match the contents of an HTML tag -->
+  <script>
+
+    var html = "<b class='hello'>Hello</b> <i>world!</i>";
+    /*
+      Uses capture backreference
+     */
+    var pattern = /<(\w+)([^>]*)>(.*?)<\/\1>/g;
+    /*
+      Runs the pattern on the test string.
+     */
+    var match = pattern.exec( html );
+
+    console.log( match );
+
+    assert( match[0] == "<b class='hello'>Hello</b>",
+    '7.7: The entire tag, start to finish.');
+
+    assert( match[1] == 'b',
+    '7.7: The tag name.');
+
+    assert( match[2] == " class='hello'",
+    '7.7: The tag attributes.');
+
+    assert( match[3] == "Hello",
+    '7.7: The contents of the tag.');
+
+    match = pattern.exec( html );
+
+    console.log( match );
+
+    assert( match[0] == '<i>world!</i>',
+    '7.7: The entire tag, start to finish again.');
+
+    assert( match[1] == 'i',
+    '7.7: The tag name.');
+
+    assert( match[2] == "",
+    '7.7: The tag attributes.');
+
+    assert( match[3] == "world!",
+    '7.7: The contents of the tag.');
+  </script>
+</body>
+
+</html>
