@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Replacing using functions</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 7.9: Converting a dashed string to camel case -->
+  <script>
+    /*
+      Coverts to uppercase
+     */
+    function upper( all, letter ){
+      return letter.toUpperCase();
+    }
+
+    var result = "border-bottom-width".replace(
+        /<-(\w)>/g,
+        function(all, letter){
+          return letter.toUpperCase();
+        }
+    );
+
+    console.log( 'Result: ', result);
+    assert( "border-bottom-width".replace(/<-(\w)>/g, upper),
+    '7.9: Camel cased a hyphenated string.');
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Grouping without capture</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 7.8: Grouping without capturing -->
+  <script>
+    /*
+      Uses a passive subexpression sine it can prevents unnecessary captures!
+     */
+    var pattern = /((?:ninja-)+)sword/;
+
+    var ninjas = "ninja-ninja-sword".match( pattern );
+
+    assert( ninjas.length == 2,
+    '7.8: Only one capture was returned.');
+
+    assert( ninjas[1] == "ninja-ninja-",
+    '7.8: Matched both words, without any extra capture.');
+
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Compressing Query String</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 7.10: A technique for compressing a query string -->
+  <script>
+
+    function compress( source ){
+      /*
+        Declares a hash in which we store the keys and values that we find in source.
+      */
+      var keys = {};
+
+      /*
+        String replace() method is being used as a means of traversing a string
+        for values, rather than as an actual search-and-replace mechanism!
+      */
+      source.replace(
+          /([^=&]+)=([^&]*)/g,
+          function( full, key, value ){
+            /*
+              Extracts key/value info
+             */
+            keys[key] = (keys[key] ? keys[key] + ',' : '') + value;
+
+            /*
+              Notices we simply return the empty string because we really don't care
+              what substitution happen to the source string.
+            */
+            return "";
+          }
+      );
+
+      var result = [];
+
+      /*
+        Collects key info
+       */
+      for ( var key in keys ) {
+        result.push( key + '=' + keys[key] );
+      }
+
+      /*
+        Joins results with '&'
+       */
+      return result.join('&');
+    }
+
+    var keys = compress('foo=1&foo=2&blah=a&blah=b&foo=3');
+    console.log( 'Keys: ', keys );
+
+    assert( compress('foo=1&foo=2&blah=a&blah=b&foo=3') ==
+            "foo=1,2,3&blah=a,b",
+            '7.10: Compression is OK!');
+  </script>
+</body>
+</html>
