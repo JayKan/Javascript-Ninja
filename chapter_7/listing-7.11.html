@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Solving common problems with Regular Expressions: Trimming a string</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 7.11: A common solution to stripping whitespace from a string -->
+  <script>
+    /*
+      Trims a string without a looping
+     */
+    function trim( str ){
+      return( str || "" ).replace(/^\s+|\s+$/g, "");
+    }
+
+    var trimmed = trim(" #id div.class ");
+    console.log('Trimmed_1 result: ', trimmed );
+
+    /*
+      Trim2 using regular expression
+     */
+    function trim2( string ){
+      return string
+          .replace(/^\s\s*/, '')
+          .replace(/\s\s*$/, '' );
+    }
+    var trimmed2 = trim2(' #id div.class ');
+    console.log('Trimmed_2 result: ', trimmed2 );
+
+
+    /*
+      Trim3 using regular expression plus slices
+     */
+    function trim3( string ){
+      var str = string.replace(/^\s\s*/, ''),
+          ws  = /\s/,
+          i   = string.length;
+      while ( ws.test(str.charAt(--i)) );
+      return str.slice(0, i+1);
+    }
+
+    assert( trim(" #id div.class ") == "#id div.class",
+    '7.11: Extra whitespace trimmed from a selector string.');
+
+    assert( trimmed2 == '#id div.class',
+    '7.11: Trimmed_2 implementation also works.');
+
+    assert( trimmed3 == "#id div.class",
+        '7.11: Trimmed_3 implementation also works.');
+
+  </script>
+</body>
+
+</html>
