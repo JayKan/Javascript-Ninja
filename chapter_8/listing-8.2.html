@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>A long-running task example</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+</head>
+
+<body>
+
+  <table><tbody></tbody></table>
+
+  <script type="text/javascript">
+    /*
+      Finds the <tbody></tbody> element that we're
+      going to create a boatload of rows for.
+     */
+    var tbody = document.getElementsByTagName( 'tbody' )[0],
+        tr,
+        td;
+
+    /*
+      Creates 20,000 rows
+     */
+    for ( var i = 0; i < 20000; i++ ) {
+
+      /*
+        Creates an individual row first.
+       */
+      tr = document.createElement( 'tr' );
+
+      for ( var t = 0; t < 6; t++ ) {
+
+        /*
+          For each row, creates six cells, each with a text node.
+         */
+        td = document.createElement( 'td' );
+        td.appendChild( document.createTextNode( i + ',' + t) );
+        tr.appendChild( td );
+      }
+
+      tbody.appendChild( tr );
+    }
+  </script>
+</body>
+
+</html>

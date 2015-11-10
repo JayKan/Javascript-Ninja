@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Taming threads and times: Difference between timeouts && intervals</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+
+  <!-- 8.1: Two ways to create repeating timers -->
+  <script>
+    /*
+      IMPORTANT NOTES:
+      - JavaScript, by nature, is single-threaded (only one piece of JavaScript code can execute at a time),
+        timers provide a way to dance around this restriction, resulting in a rather oblique way of executing code.
+      - JavaScript provides us with two methods to create timers and two methods to clear them:
+        1) setTimeout: creates a timer
+        2) clearTimeout: clears a timer
+        3) setInterval: creates an interval timer
+        4) clearInterval: clears the interval timer
+      - Recap:
+        1) JavaScript engines execute ONLY a single thread at a time, forcing asynchronous events
+           to queue up awaiting execution.
+        2) If a timer is blocked from immediately executing, it will be delayed until the next available
+           time of execution (which may be longer, but NEVER shorter, than the specified time)
+        3) Intervals may end up executing back to back with no delay if they get backed up enough,
+           and multiple instances of the same interval handler will never be queued up.
+     */
+
+    /*
+      1st Way: Sets up a timeout that reschedules itself every 10 milliseconds.
+     */
+    setTimeout(function repeatMe(){
+      /* Some long block of code ... */
+      setTimeout(repeatMe, 10);
+    }, 10);
+
+    /*
+      2nd Way: Sets up an interval that triggers every 10 milliseconds.
+     */
+    setInterval(function(){
+      /* Some long block of code ... */
+    }, 10);
+
+  </script>
+</body>
+
+</html>
