@@ -3,8 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <title>Central timer control</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+  <style type="text/css">
+    #box { position: absolute; background-color: #00bfff; border:  2px solid #00008b; padding: 8px; }
+  </style>
 </head>
+
 <body>
 
+  <div id="box">Hello!</div>
+
+  <!-- 8.4: A central time control to manage multiple handlers -->
+  <script>
+    /*
+      IMPORTANT NOTES:
+      - Having a central control for our timers give us a lot of power and flexibility:
+        1) We only need ONE timer running per page at at time.
+        2) We can pause and resume the times at will.
+        3) The process for removing callback functions is trivialized.
+     */
+
+    /*
+      Declares the timer control object.
+     */
+    var timers = {
+      /*
+        Records states.
+       */
+      timeID:  0,
+      timers: [],
+
+      /*
+        Creates the function to add handlers
+       */
+      add: function( fn ){
+        this.timers.push( fn );
+      },
+
+      /*
+        Creates the function to start a timer.
+       */
+      start: function(){
+        /*
+          First verify that there isn't already a timer running by checking if the
+          timeID member has a value.
+         */
+        if ( this.timeID ) return;
+
+        /*
+          If there is no timer executing,
+          we execute an immediate function to start our central timer.
+         */
+        (function runNext(){
+          /*
+            If there are any registered handlers, we run through a loop and execute each handler
+           */
+          if ( timers.timers.length > 0 ) {
+            for ( var i = 0; i < timers.timers.length; i++ ) {
+              /*
+                Remove handler from array if returns false
+               */
+              if ( timers.timers[i]() === false ) {
+                timers.timers.splice(i, 1);
+                i--;
+              }
+            }
+            timers.timeID = setTimeout(runNext, 0);
+          }
+        })();
+      },
+
+      /*
+        Creates the function to stop a timer.
+       */
+      stop: function(){
+        clearTimeout( this.timeID );
+        this.timeID = 0;
+      }
+    };
+
+    // Reference to the element
+    var box = document.getElementById('box'),
+        x   = 0,
+        y   = 20;
+
+    /*
+      Adds a handler that moves the element horizontally.
+     */
+    timers.add(function(){
+      box.style.left = x + 'px';
+      if ( ++x > 50 ) return false;
+    });
+
+    /*
+      Adds a handler that movies the element vertically.
+     */
+    timers.add(function(){
+      box.style.top = y + 'px';
+      y +=2;
+      if ( y > 120 ) return false;
+    });
+
+    /*
+      Starts our timer!!
+     */
+    timers.start();
+
+  </script>
 </body>
+
 </html>
