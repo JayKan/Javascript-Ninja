@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Asynchronous Testing Suite</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 8.5: A simple asynchronous test suite -->
+  <script type="text/javascript">
+    /*
+
+     */
+    (function(){
+      /*
+        Retain state
+       */
+      var queue  = [],
+          paused = false;
+      /*
+        Defines the test()
+       */
+      this.test = function(fn){
+        queue.push( fn );
+        runTest();
+      };
+
+      /*
+        Defines the pause()
+       */
+      this.pause = function(){
+        paused = true;
+      };
+
+      /*
+        Defines the resume()
+       */
+      this.resume = function(){
+        paused = false;
+        setTimeout(runTest, 1);
+      };
+
+      function runTest(){
+        if ( !paused && queue.length ) {
+          queue.shift()();
+          if ( !paused ) resume();
+        }
+      }
+    })();
+
+    test(function() {
+      pause();
+      setTimeout(function(){
+        assert(true, '8.5: First simple asynchronous test completed!');
+        resume();
+      }, 100);
+    });
+
+    test(function() {
+      pause();
+      setTimeout(function() {
+        assert(true, '8.5: Second simple asynchronous test completed!');
+        resume();
+      }, 200);
+    });
+  </script>
+
+</body>
+</html>
