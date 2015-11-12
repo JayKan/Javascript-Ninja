@@ -11,7 +11,24 @@
   <!-- 9.1: Basic test of the eval() method -->
   <script>
     /*
-      NOTES:
+      IMPORTANT NOTES:
+
+      - The eval(...) function in JavaScript takes a string as an argument, and treats the contents of
+        the string as if it had actually been authored code at that point the program. In other words,
+        you can programmatically generate code inside of your authored code, and run the generated code
+        as if it had been there at author time.
+
+      - eval(...) when used in a strict-mode program operates in its own lexical scope, which means
+        declarations made inside of the eval() do NOT actually modify the enclosing scope.
+        -> Lexical scope means that scope is defined by author-time decisions of where functions are
+          declared. The lexing phase of compilation is essentially able to know where and how all identifiers
+          are declared, and thus predict how they will be looked-up during execution.
+        -> Two mechanisms in JavaScript can "cheat" lexical scope: eval(...) and with(). With eval(...), it can
+           modify existing lexical scope (at runtime) by evaluating a string of "code" which has one or more
+           declarations in it.
+        -> The downside to these mechanisms is that it defeats the Engine's ability to perform compile-time
+           optimizations regarding scope look-up, because the Engine has to assume pessimistically that
+           such optimizations will be invalid. Code will run slower as a result of using either feature (Don't misuse them!!)
 
       - Within JavaScript there are a number of different mechanisms for evaluating code and there are:
         1) The eval() method
