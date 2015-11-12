@@ -1,4 +1,5 @@
 function assert( value, description ){
+  var ninja = 5;
   var resultsList = document.getElementById( 'results' );
   if ( !resultsList ){
     resultsList = document.createElement( 'ul' );

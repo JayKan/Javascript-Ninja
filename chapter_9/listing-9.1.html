@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Runtime code evaluation - Evaluation with the eval() method</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 9.1: Basic test of the eval() method -->
+  <script>
+    /*
+      NOTES:
+
+      - Within JavaScript there are a number of different mechanisms for evaluating code and there are:
+        1) The eval() method
+          - The eval() method executes the code passed into it in string form, within the current context.
+        2) Function constructors
+        3) Timers
+        4) The <script> element
+
+      - Basic Eval() Functionality:
+        1) It will evaluate the code passed to it as a string.
+        2) It will execute that code in the scope within which eval() is called.
+
+      - Evaluation Results:
+        1) The eval() method will return the result of the LAST expression in the passed code string.
+        2) Ex: eval('3+4;5+6') -> 11
+        3) Ex: eval('{ninja: 1}') -> 1 (needs to wrap object with parentheses!!)
+        4) Ex: eval('( {ninja: 1} )') -> {ninja: 1} -> parentheses are IMPORTANT here!!
+     */
+
+    /*
+      Tests a simple expression.
+     */
+    assert( eval('5 + 5') === 10,
+    '9.1: 5 and 5 is 10');
+
+    /*
+      Tests a valueless evaluation.
+      - creates a side effect of var ninja = 5;
+      - eval() returns the result of the last expression in the passed in string.
+        1) the last expression -> it should be noted that anything that isn't a simple variable,
+                                  primitive, or assignment will need to be wrapped in parentheses!!
+     */
+    assert( eval('var ninja = 5;') === undefined,
+    '9.1: No value should be defined.');
+
+    var result = eval('3+4;5+5'); // it should returns 10;
+    console.log(result);
+
+    var a = eval('{ninja:1}'); // it returns 1
+    console.log(a);
+
+    // now it returns the object you want!
+    // Remember, objects need to be wrapped with parentheses in order for
+    // the correct value to be returned!!
+    var b = eval('({ninja: 1})');
+    console.log(b);
+
+
+
+    /*
+      Verifies the side effect.
+     */
+    assert( ninja === 5,
+    '9.1: Side effect: The variable ninja NOW was created after running above assert() first :(');
+
+    /*
+      Tests evaluation scope.
+     */
+    (function(){
+      eval('var ninja = 6');
+      assert( ninja === 6,
+      '9.1: Evaluated within the current scope, which was created via immediate function closure :)');
+    })();
+
+    /*
+      Test for scope 'leakage'.
+     */
+    assert( window.ninja === 5,
+    '9.1: The global scope was unaffected.');
+
+    assert( ninja === 5,
+    '9.1 Teh global scope was unaffected again!');
+
+  </script>
+
+</body>
+
+</html>
