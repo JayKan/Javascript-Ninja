@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Testing various returned values from eval()</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+
+  <!-- 9.2: Testing returned values from eval() -->
+  <script type="text/javascript">
+    /*
+      Demonstrates various ways we can use eval() to create Objects or Functions:
+      1) Uses parentheses to wrap your string arguments as the last expression to be executed, OR
+      2) Uses false||{}||function(){} syntax will work too in the absence of the parentheses!
+
+      Creates an object from a string containing an object literal
+      and tests that not only was the object created, but it has the
+      expected name property.
+
+      - Creates an Ninja object via eval() on the fly!
+     */
+    var ninja = eval( 'false||{name: \'Ninja\'}' );
+    assert( ninja !== undefined,
+    '9.2: Ninja was not undefined, it was created via eval()...');
+    assert( ninja.name === 'Ninja',
+    '9.2: and with the expected name property/value...');
+
+    /*
+      Creates a function from a function literal in a string
+      and tests that the function was created and returns the
+      expected value when called.
+
+      - Creates a function expression via eval() on the fly!
+     */
+    var fn = eval( '(function(){ return \'Ninja\';})' );
+    assert( typeof fn === 'function',
+    '9.2: the function was created via eval()...');
+    assert( fn() === 'Ninja',
+    '9.2: and fn() returns the expected value too...');
+
+    /*
+      Tries to create another version of the first test, leaving off the
+      parentheses. The 1st test passes, but the 2nd test fails (below example)
+      because the object was not created as expected ( value of 'Ninja' was created instead )
+
+      - A quick to fix ninja2 is to use || operator,
+        Ex: eval('false||{name:"Ninja"}') OR, eval('({name:"Ninja"})')
+     */
+    var ninja2 = eval( '{name: \'Ninja\'}' );
+    console.log( ninja2 );
+
+    assert( ninja2 !== undefined,
+    '9.2: Ninja2 was created without parentheses wrapped around naked object :(');
+    assert( ninja2.name === 'Ninja',
+    '9.3: Ninja2 is not an object. Ninja2 === Ninja....');
+    assert( ninja2 === 'Ninja',
+    '9.3: Ninja2 was created && assigned it to Ninja...');
+
+    /*
+      Creates fn2 without using parentheses syntax, instead use || operator
+     */
+    var fn2 = eval( 'false||function(){ return true;}' );
+    assert( typeof fn2 === 'function', '9.3: fn2 was created without using parentheses!');
+    assert( fn2() === true, '9.3: fn2() return true as well...');
+
+  </script>
+</body>
+</html>
