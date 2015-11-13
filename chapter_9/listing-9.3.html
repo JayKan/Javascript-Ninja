@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Evaluation in the Global Scope</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 9.3: Evaluating code in the global scope -->
+  <script type="text/javascript">
+    /*
+      Defines the global eval() function
+     */
+    function globalEval(data) {
+      data = data.replace(/^\s*|\s*$/g, '');
+      if ( data ) {
+        /*
+          Creates a script node
+         */
+        var head   = document.getElementsByTagName('head')[0] ||
+                     document.documentElement,
+            script = document.createElement('script');
+
+        script.type = 'text/javascript';
+        script.text = data;
+
+        /*
+          Attaches it to the DOM
+         */
+        head.appendChild( script );
+
+        /*
+          Blows it away
+         */
+        head.removeChild( script );
+      }
+    }
+
+    window.onload = function(){
+      (function(){
+        globalEval('var test = 5;');
+      })();
+
+      assert( test === 5,
+      '9.3: The code was evaluated globally.');
+    }
+  </script>
+
+</body>
+
+</html>
