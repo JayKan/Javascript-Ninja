@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Decompiling a function into a string</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 9.4: Decompiling a function into a string -->
+  <script type="text/javascript">
+    /*
+      NOTES:
+      - The value returned by toString() will contain all the whitespaces of the original declaration,
+        including line terminators.
+     */
+    function test(a){ return a + a; }
+
+    assert( test.toString() === 'function test(a){ return a + a; }',
+    '9.4: Function decompiled!');
+
+  </script>
+
+</body>
+
+</html>

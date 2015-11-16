@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Decompiling Functions</title>
+  <link rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 9.5: A function for finding the argument names of a function -->
+  <script type="text/javascript">
+
+    function argumentNames(fn) {
+      /*
+        Fins the argument list.
+       */
+      var found = /^[\s\(]*function[^(]*\(\s*([^)]*?)\s*\)/
+          .exec(fn.toString());
+
+      /*
+        Splits the list.
+       */
+      return found && found[1] ?
+          found[1].split(/,\s*/) :
+          [];
+    }
+
+    /*
+      Tests the zero-argument case.
+     */
+    assert( argumentNames(function(){}).length === 0,
+    '9.5: Works on zero-arg functions.');
+
+    /*
+      Tests the single-argument case.
+     */
+    assert( argumentNames(function(x){})[0] === 'x',
+    '9.5: Single argument works well.');
+
+    /*
+      Tests the multi-argument case.
+     */
+    var results = argumentNames(function(a,b,c,d,e){});
+    assert( results[0] === 'a' &&
+            results[1] === 'b' &&
+            results[2] === 'c' &&
+            results[3] === 'd' &&
+            results[4] === 'e',
+            '9.5: Multiple arguments working!'
+    );
+
+  </script>
+
+</body>
+</html>
