@@ -5,9 +5,179 @@
   <title>Useless callback example</title>
   <link rel="stylesheet"  href="../common/css/styles.css"/>
   <script src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <ul id="results"></ul>
 
   <script>
+    /*
+     Functions in JavaScript are objects (Notes from JavaScripts: the good parts):
+     - Objects are collection of name/value pairs having a hidden link to a prototype object.
+     - Objects produced from object literals are linked to Object.prototype.
+     - Functions objects are linked to Function.prototype (which is itself linked to Object.prototype)
+     - Every function object is also created with a prototype property. Its value is an object with a constructor
+     property whose value is the function.
+     - Invoking a function 'suspends' the execution of the current function, passing control and parameters
+     to the new function.
+     - In addition to the declared parameters, every function receives two additional parameters:
+        1) this
+        2) arguments
+     - The 'this' parameter is very important in object oriented programming, and its value is determined
+       by the invocation pattern. There are 4 patterns of invocation in JavaScript and they are:
+         1) the method invocation pattern
+         2) the function invocation pattern
+         3) the constructor invocation pattern
+         4) the apply invocation pattern
+      The patterns differ in how the bonus parameter 'this' is initialized!
+     */
 
+    /*
+     The Method Invocation Pattern (1st):
+
+     - When a function is stored as property of an object, we call it method.
+     - When a method is invoked, 'this' is bound to that object.
+     - A method can use 'this' to access the object so that it can retrieve values from the
+       object or modify the object. The binding of 'this' to the object happens at invocation time.
+     - Methods that get their object context from 'this' are called public methods.
+     */
+    // Create myObject. It has a value and an increment
+    // method. the increment method takes an optional
+    // parameter. If the argument is not a number, then 1
+    // is used as the default.
+    var myObject = {
+      value: 0,
+      increment: function(inc){
+        this.value += typeof inc === 'number' ? inc : 1;
+      }
+    };
+
+    myObject.increment();
+    assert( myObject.value === 1, 'myObject.value should === 1');
+
+    myObject.increment(2);
+    assert( myObject.value === 3, 'myObject.value should === 3');
+
+
+    /*
+      The Function Invocation Pattern (2nd):
+
+      - When a function is not the property of an object, then it is invoked as a function.
+      - When a function is invoked with this pattern, 'this' is bound tot he global object.
+      - This was a mistake in the design of the language. Had the language been designed correctly,
+        when the inner function is invoked, 'this' would still be bound to the 'this' variable of the
+        outer function. A consequence of this error is that a method cannot employ an inner function.
+     */
+    var add = function(a, b){
+      return a + b;
+    };
+
+    var sum = add(3, 4);
+    assert( sum === 7, 'Sum should be 7!');
+
+    myObject.double = function(){
+      // workaround
+      var that = this;
+
+      var helper = function(){
+        that.value = add(that.value, that.value);
+      };
+
+      // Invoke helper as a function.
+      helper();
+    };
+
+    // Invoke double as a method.
+    myObject.double();
+    console.log('Double Value: ', myObject.value );
+    assert( myObject.value === 6, 'myObject double() gets invoked and value should be doubled as 6!');
+
+    /*
+      The Constructor Invocation Pattern (3rd)
+
+      - If a function is invoked with the 'new' prefix, then a new object will be created with a
+        hidden link to the value of the function's prototype member, and 'this' will be bound to
+        that newly created object.
+      - The 'new' prefix also changes the behavior of the return statement!
+     */
+    // Creates a constructor function called Quo.
+    // It makes an object with a status property.
+    var Quo = function(string) {
+      this.status = string;
+    };
+
+    // Gives all instances of Quo a public method called get_status().
+    Quo.prototype = {
+      get_status: function(){
+        return this.status;
+      }
+    };
+
+    // Makes an instance of Quo.
+    var myQuo = new Quo('confused');
+    assert( myQuo.get_status() === 'confused',
+    'myQuo instance get_status() should returned \'confused\'.');
+
+    /*
+      The Apply Invocation Pattern (4th)
+
+      - The apply() method lets us construct an array of arguments to use to invoke a function.
+      - The apply() method takes 2 arguments: this, and an array of arguments.
+     */
+    // Make an array of 2 numbers and add them.
+    var array = [ 3, 4 ];
+    var applyResult = add.apply(null, array);
+
+    assert( applyResult === 7, 'Use add.apply() should get me the same result as 7');
+
+    // Make an object with a status member.
+    var statusObject = {
+      status: 'A-OK'
+    };
+
+    // statusObject does not inherit from Quo.prototype,
+    // but we can invoke the get_status method on
+    // statusObject even though statusObject does not
+    // have a get_status method.
+    var status = Quo.prototype.get_status.apply(statusObject);
+    var status_again = Quo.prototype.get_status.bind( statusObject );
+    assert(status === 'A-OK',
+    'statusObject uses Quo.prototype.get_status method via apply() to invoke itself.');
+    assert(status_again() === 'A-OK',
+    'status_again uses Quo.prototype.get_status method via bind()');
+
+    /*
+      - A bonus parameter that is available to functions when they are invoked is the 'arguments' array.
+      - It gives the function access to all of the arguments that were supplied with the invocation.
+      - Because of a design error, arguments is not REALLY an array. It is an array-like objects. Arguments
+        has a length property, but it lacks ALL of the array methods.
+     */
+    // Make a function that adds a lot of stuffs.
+    // Note that defining the variable sum inside of
+    // the function does not interfere with the sum
+    // defined outside of the function. The function
+    // ONLY sees the inner one.
+    var sum_again = function(){
+      var i, ii = arguments.length, sum = 0;
+      for ( i = 0; i < ii; i+=1 ) {
+        sum += arguments[i];
+      }
+      return sum;
+    };
+    assert( sum_again(4, 8, 15, 16, 23, 42) === 108, 'sum_again should adds a lot of stuffs and equals to 108!');
+
+    /*
+      Return Statement:
+
+      - The 'return' statement can be used to cause the function to return early.
+      - When 'return' is executed, the function returns immediately without executing the remaining statements.
+      - A function always returns a value. If the return value is not specified, then undefined is returned.
+      - If the function is invoked with the 'new' prefix, aka the Constructor pattern, the return value is not an
+        object, then 'this' (the new object) is returned instead.
+     */
+
+
+    // ------------------------------------------------------------------------------------------------- //
     // IMPORTANT NOTES about 'Functions Invocations':
     // 4 ways that functions can be invoked:
     // 1) As a function, in which the function is invoked in a straightforward manner
@@ -15,7 +185,8 @@
     //    - When a function is assigned to a property of an object and the invocation occurs by referencing
     //      the function using that property, then the function is invoked as a method as that object.
     // 3) As a constructor, in which a new object is brought into being
-    // 4) Via its apply() or call() methods, which is ki
+    // 4) Via its apply() or call() methods
+    // As a result of function invocations, invoking a function SUSPENDS the execution of the CURRENT function.
     var text = 'Domo arigtato!';
     function useless(callback){
       return callback();
@@ -45,15 +216,15 @@
     // Inner named functions are available anywhere within the enclosing function (hoisted), even as forward references
     function outer(){
       assert(typeof inner === 'function',
-      'inner() in scope before declaration');
+          'inner() in scope before declaration');
 
       function inner(){}
 
       assert(typeof inner === 'function',
-      'inner() in scope after declaration' );
+          'inner() in scope after declaration' );
 
       assert(window.inner === undefined,
-      'inner() not in global scope');
+          'inner() not in global scope');
     }
 
     // The variable that assign a function has NOTHING to do
@@ -72,35 +243,30 @@
       // is established, and the second that the property
       // of the function is recorded.
       assert(typeof window.isNimble === 'function',
-      'isNimble() defined');
+          'isNimble() defined');
       assert(isNimble.name === 'isNimble',
-      'isNimble() has a name.');
+          'isNimble() has a name.');
 
       // Tests that the variable references the anonymous function
       // that the name property is set to the empty string ( not null )
       assert(typeof window.canFly === 'function',
-      'canFly() defined.');
+          'canFly() defined.');
       assert(canFly.name === '',
-      'canFly() has no name.');
+          'canFly() has no name.');
 
       // Tests that the property references the function.
       // We could also test that the function has an empty name property here.
       assert(typeof window.isDeadly === 'function',
-      'isDeadly() defined.');
+          'isDeadly() defined.');
 
       // Tests that outer() can be referenced in the global scope,
       // but that inner() can't
       outer();
 
       assert(window.wieldeSword.name === 'swingsSword',
-      'wieldSword\'s real name is swingsSword.');
+          'wieldSword\'s real name is swingsSword.');
     };
-
   </script>
-</head>
-
-<body>
-  <ul id="results"></ul>
 </body>
 
 </html>
