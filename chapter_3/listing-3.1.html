@@ -69,8 +69,26 @@
         outer function. A consequence of this error is that a method cannot employ an inner function.
      */
     var add = function(a, b){
+      if (typeof a !== 'number' || typeof b !== 'number') {
+        throw{
+          name: 'TypeError',
+          message: 'adds need numbers'
+        };
+      }
       return a + b;
     };
+
+    var try_it = function(){
+      try {
+        // - If an exception is thrown within a try block, control will go to its catch clause.
+        // - A try statement has a single catch block that will catch all exceptions.
+        add('seven');
+      } catch(e){
+        document.writeln(e.name + ': ' + e.message);
+      }
+    };
+    try_it();
+
 
     var sum = add(3, 4);
     assert( sum === 7, 'Sum should be 7!');
@@ -175,6 +193,42 @@
       - If the function is invoked with the 'new' prefix, aka the Constructor pattern, the return value is not an
         object, then 'this' (the new object) is returned instead.
      */
+
+
+    /**
+     * Augmenting Types
+     *
+     * By augmenting Function.prototype with a 'method' method, we no longer have to type the
+     * name of the prototype property. That bit of ugliness can now be hidden!
+     *
+     * By augmenting the basic types, we can make significant improvements to the expressiveness of the language.
+     * Because of the dynamic nature of JavaScript's prototypal inheritance, all values are immediately endowed
+     * with the new methods, even values that were created BEFORE the methods were created!
+     *
+     *
+     * @returns {*} function instance for chaining
+     */
+    Function.prototype.method = function(name, func) {
+      // Adds a method conditionally based on current prototype
+      if (!this.prototype[name]) {
+        this.prototype[name] = func;
+      }
+      return this;
+    };
+
+    Number.method('integer', function(){
+      return Math[this < 0 ? 'ceil' : 'floor'](this);
+    });
+
+    assert((-10/3).integer() === -3, '-10 divides 3 should returns me -3 as the integer.');
+    document.writeln((-10/3).integer()); // -3
+
+    String.method('trim', function(){
+      // removes spaces from the ends of a string
+      return this.replace(/^\s+|\s+$/g, '');
+    });
+
+    assert((" neat ".trim()) === 'neat', 'Test string.trim() method.');
 
 
     // ------------------------------------------------------------------------------------------------- //
