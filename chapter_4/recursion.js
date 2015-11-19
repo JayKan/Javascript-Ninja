@@ -2,8 +2,16 @@
 
   'use strict';
 
+  Function.prototype.method = function(name, func) {
+    // Adds a method conditionally based on current prototype
+    if (!this.prototype[name]) {
+      this.prototype[name] = func;
+    }
+    return this;
+  };
+
   /**
-   * ----------------------------- Recursion -------------------------------------------
+   * -------------------------------- Recursion -----------------------------------------
    *
    * A recursive function is a function that calls itself, either directly or indirectly.
    *
@@ -65,5 +73,73 @@
     });
     return results;
   };
+
+  /**
+   * ----------------------------- Closure ----------------------------------
+   *
+   * Instead of initializing myObject with an object literal, we will initialize myObject
+   * by calling a function that returns an object literal.
+   *
+   * We are NOT assigning a function myObject in this case. Instead, we are assigning the
+   * result of invoking that function.
+   */
+  var myObject = (function(){
+    var value = 0;
+    return {
+      increment: function(inc){
+        value+= typeof inc === 'number' ? inc: 1;
+      },
+      getValue: function(){
+        return value;
+      }
+    };
+  })();
+
+  /**
+   * @private
+   * @kind function
+   * @description
+   *
+   * Define a function that sets a DOM node's color
+   * to yellow and then fades it to white
+   */
+  var fade = function(node) {
+    var level = 1;
+    var step = function(){
+      var hex = level.toString(16);
+      node.style.backgroundColor = '#FFFF' + hex + hex;
+      if (level < 15) {
+        level+=1;
+        setTimeout(step, 100);
+      }
+      setTimeout(step, 100);
+    }
+  };
+  fade(document.body);
+
+  // Use immediately invoked functions to construct a Module
+  String.method('deentityify', function(){
+    // The entity table. It maps names to characters.
+    var entity = {
+      quot: '""',
+      lg:   '<',
+      gt:   '>'
+    };
+
+    // Return the deentityify method.
+    return function(){
+      // This is the deentityify method. It calls the string
+      // replace method, looking for substrings that start with
+      // '&' and end with ';'. If the characters in between are
+      // in the entity table, then replace the entity with the
+      // character from the table.
+      return this.replace(/&([^&;]+);/g,
+        function(a, b) {
+          var r = entity[b];
+          return typeof r === 'string' ? r : a;
+        }
+      );
+    };
+  }());
 
 })();
