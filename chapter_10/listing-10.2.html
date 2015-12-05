@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Assignment in with scopes</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 10.2 Assignment in with scopes -->
+  <script type="text/javascript">
+
+    var katana = {
+      isSharp: true,
+      use: function(){
+        this.isSharp = !this.isSharp;
+      }
+    };
+
+    with (katana) {
+
+      // Assigns to an existing property
+      isSharp = false;
+
+      assert(katana.isSharp === false,
+      '10.2: Properties can be assigned within with scope context.');
+
+      // Attempts to create a new property
+      cut = function(){
+        isSharp = false;
+      };
+
+      assert(typeof katana.cut === 'function',
+      '10.2: New Property can be created on the fly on the scoped object.');
+
+      assert(typeof window.cut === 'function',
+      '10.2: New properties are created in the global scope instead of with scope context.');
+    }
+
+  </script>
+</body>
+
+</html>
