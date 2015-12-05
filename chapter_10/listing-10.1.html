@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Listing 10.1</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+  <!-- 10.1 Creating a with scope using an object -->
+  <script type="text/javascript">
+    /*
+      A 'with' statement creates a scope within the properties of a
+      specified object that can be referenced without a prefix.
+     */
+
+    // Defines a top-level variable
+    var use = 'other';
+
+    var katana = {
+      isSharp: true,
+      use: function(){
+        this.isSharp = !this.isSharp;
+      }
+    };
+
+    // Establishes a with scope.
+    // Within the 'with' scope, katana object's properties can be
+    // accessed without referencing katana object.
+    with (katana) {
+
+      assert(use !== 'other' && typeof use === 'function',
+      '10.1: use is a function from the katana object.');
+
+      assert(this !== katana,
+      '10.1: Context still remains the same; keeps its original value.');
+    }
+
+    assert(use === 'other' && typeof use === 'string',
+    '10.1: Outside the with scope, use should be a string!');
+
+    assert(typeof isSharp === 'undefined',
+    '10.1: Outside the with scope, isSharp should be undefined.');
+  </script>
+
+</body>
+
+</html>
