@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Performance considerations with using With Statement</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+<body>
+  <!-- 10.3: Performance testing the with statement -->
+  <script type="text/javascript">
+    /**
+     * Considerations when using With Statement:
+     * - it slows down the execution performance of any JavaScript that it encompasses.
+     */
+    var ninja = { foo: 'bar'},
+        value,
+        maxCount = 100000,
+        n,
+        start,
+        elapsed;
+
+    /*
+      The first test assigns the value of the ninja.foo property to the variable
+      value without declaring any with scope. (Tests without using with statement. Perform the best!)
+     */
+    start = new Date().getTime();
+    for (n = 0; n < maxCount; n++) {
+      value = ninja.foo;
+    }
+    elapsed = new Date().getTime() - start;
+    assert(true,
+    '10.3: Without with Statement execution time === ' + elapsed);
+
+    /*
+      The 2nd test performs the same assignment as the first test, except that the
+      assignment takes places within a with scope.
+     */
+    start = new Date().getTime();
+    with(ninja) {
+      for (n = 0; n < maxCount; n++ ) {
+        value = foo;
+      }
+    }
+    elapsed = new Date().getTime() - start;
+    assert(true,
+    '10.3: With \'with\' statement execution time === ' + elapsed);
+
+    /*
+      Tests assignments using with statement.
+     */
+    start = new Date().getTime();
+    with(ninja) {
+      for (n = 0; n < maxCount; n++) {
+        foo = n;
+      }
+    }
+    elapsed = new Date().getTime() - start;
+    assert(true,
+    '10.3: With (with assignment) execution time === ' + elapsed );
+
+    // Tests with no access in for-loop
+    start = new Date().getTime();
+    with(ninja) {
+      for (n = 0; n < maxCount; n++ ) {
+        value = 'no access value';
+      }
+    }
+    elapsed = new Date().getTime() - start;
+    assert(true,
+    '10.3: With (without access) execution time === ' + elapsed);
+
+
+  </script>
+</body>
+</html>
