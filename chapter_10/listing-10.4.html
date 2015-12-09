@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Templating with "With" Statement</title>
+  <script type="text/javascript" src="./template.js"></script>
+</head>
+<body>
+
+  <script type="text/tmpl" id="colors1">
+        <h1>Color 1 Template: </h1>
+        <p>Here's a list of <%= items.length %> items:</p>
+        <ul>
+          <% for (var i=0; i < items.length; i++) { %>
+          <li style='color:<%= colors[i % colors.length] %>'>
+            <%= items[i] %></li>
+          <% } %>
+        </ul>
+        and here's another...
+  </script>
+  <script type="text/tmpl" id="colors2">
+        <h1>Switch to Color 2 Template: </h1>
+        <p>Here's a list of <%= items.length %> items:</p>
+        <ul>
+          <% for (var i=0; i < items.length; i++) {
+          print("<li style='color:", colors[i % colors.length], "'>",
+          items[i], "</li>");
+          } %>
+        </ul>
+  </script>
+
+  <input type="button" value="Run Colors 1"
+       onclick="replaceContent('colors1')">
+  <input type="button" value="Run Colors2"
+       onclick="replaceContent('colors2')">
+
+  <p id="content">Replaced Content will go here!</p>
+
+  <script type="text/javascript">
+    var colorsArray = [ 'red', 'green', 'blue', 'orange'],
+        items = [],
+        i,
+        maxCount = 50;
+
+    for ( i = 0; i < maxCount; i++ ) {
+      items.push( 'Test: ' + i );
+    }
+
+    function replaceContent(name) {
+      document.getElementById('content').innerHTML =
+          template(name, {colors: colorsArray, items: items});
+    }
+  </script>
+</body>
+</html>
