@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DOM attributes and properties</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+<body>
+
+  <div></div>
+
+  <!-- 12.1: Accessing attribute values via DOM methods and properties -->
+  <script type="text/javascript">
+    window.onload = function(){
+
+      // Element reference
+      var div = document.getElementsByTagName('div')[0];
+
+      // Tests the DOM setAttribute() method
+      div.setAttribute('id', 'ninja-1');
+      assert(div.getAttribute('id') === 'ninja-1',
+      '12.1: Attribute successfully changed.');
+
+      // Tests the property value
+      div.id = 'ninja-2';
+      assert(div.getAttribute('id') === 'ninja-2',
+      '12.1: Property successfully changed.');
+
+      // Tests the property/attribute correspondence
+      div.id = 'ninja-3';
+      assert(div.getAttribute('id') === 'ninja-3',
+      '12.1: Attribute successfully changed via property.');
+      assert(div.id === 'ninja-3',
+      '12.1: Property successfully changed again.');
+
+      // Tests more property/attribute correspondence
+      div.setAttribute('id', 'ninja-4');
+      assert(div.id === div.getAttribute('id'),
+      '12.1: Property/Attribute successfully changed via setAttribute() method.');
+    };
+  </script>
+</body>
+</html>
