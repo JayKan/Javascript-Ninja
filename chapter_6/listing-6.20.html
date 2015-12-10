@@ -122,6 +122,65 @@
     rect.move(3, 3);
     rect.area();
 
+    // Using propertiesObject argument with Object.create()
+    var o,
+        b;
+
+    // create an object with null as prototype
+    o = Object.create(null);
+
+    assert(o.prototype == null,
+    '6.22: Object should have a null as their prototype.');
+
+    o = {};
+    // is equivalent to:
+    b = Object.create(Object.prototype);
+
+    // Example where we create an object with a couple of sample properties.
+    // Note that the 2nd parameter maps keys to *property descriptors*
+    o = Object.create(Object.prototype, {
+      // foo is a regular 'value property'
+      foo: {
+        writable: true,
+        configurable: true,
+        value: 'hello'
+      },
+
+      // bar is a getter-and-setter (accessor) property
+      bar: {
+        configurable: false,
+        get: function(){
+          return 10;
+        },
+        set: function(value) {
+          console.log('Setting \'o.bar\' to: ', value);
+        }
+      }
+    });
+
+    // Create a new object whose prototype is a new, empty object
+    o = Object.create({}, {
+      // add a single property 'p', with value 42.
+      p: {
+        value: 42,
+        enumerable: true
+      }
+    });
+
+    // By default properties ARE NOT writable, enumerable or configurable:
+    o.p = 24;
+    assert(o.p !== 24 && o.p === 42,
+    '6.22: Cannot overwrite default property!!!');
+
+    o.q = 12;
+    for (var p in o) (function(a){
+      console.log('Property: ', a);
+      console.log(o);
+    })(p);
+
+
+
+
 
 
 
