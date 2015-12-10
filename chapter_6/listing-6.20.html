@@ -74,6 +74,59 @@
     '6.20: Person is a person.');
     assert( ninja instanceof Ninja && ninja instanceof Person,
     '6.20: The Ninja is a ninja and a Person.');
+
+    /*
+      More Classical inheritance examples with Object.create()
+     */
+
+    // Shape - superClass
+    function Shape(x, y){
+      this.x = x || 0;
+      this.y = y || 0;
+    }
+
+    // superClass method
+    Shape.prototype.move = function(x, y){
+      console.info('Shape moved from: ', this.x, this.y);
+      this.x += x;
+      this.y += y;
+      console.info('Shape moved to: ', this.x, this.y);
+    };
+
+    // Rectangle - subClass
+    function Rectangle(){
+      Shape.apply(this, arguments); // call super constructor.
+      this.move = function(){
+        console.info('Overwriting method() from: ', this.x, this.y);
+        this.x += (2*arguments[0]);
+        this.y += (2*arguments[1]);
+        console.info('Overwriting move() method: ', this.x, this.y);
+      }
+    }
+
+    // subClass extends superClass
+    Rectangle.prototype = Object.create(Shape.prototype);
+    Rectangle.prototype.constructor = Rectangle;
+    Rectangle.prototype.area = function(){
+      console.info('Rectangle prototype area(): ', this.x * this.y);
+      return this.x * this.y;
+    };
+    var rect = new Rectangle(1,1);
+
+    assert( rect instanceof Rectangle,
+    '6.21: Is rect an instance of Rectangle?');
+
+    assert( rect instanceof Shape,
+    '6.21: Is rect an instance of Shape?');
+
+    rect.move(3, 3);
+    rect.area();
+
+
+
+
+
+
   </script>
 </body>
 
