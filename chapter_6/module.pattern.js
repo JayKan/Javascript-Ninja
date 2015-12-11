@@ -1,4 +1,4 @@
-;(function(){
+;(function( jQ, _ ){
 
   'use strict';
 
@@ -62,7 +62,6 @@
 
   // Outputs: Caching is: disabled
   myModule.reportMyConfig();
-
 
   // ------------------------------------------------------------------------ //
   // ------------------------ The Module Pattern ---------------------------- //
@@ -201,7 +200,33 @@
   assert( basketModule.getTotal() === (0.5+0.3),
   'The Module Pattern: basketModule should contains 2 items: bread && butter');
 
+  // ------------------------------------------------------------------------ //
+  // -------------------- Module Pattern Variations ------------------------- //
+  // ------------------------------------------------------------------------ //
+  var anotherModule = (function( j, _){
+
+    function privateMethod1() {
+      var container = document.getElementById('j-container');
+      if (!container) {
+        container = document.createElement( 'div' );
+        document.getElementsByTagName('body')[0].appendChild( container );
+        container.setAttribute( 'id', 'j-container' );
+      }
+      j(container).html('jQuery container test');
+    }
+
+    function privateMethod2() {
+      console.log(_.min([10, 5, 100, 2, 1000]) );
+    }
+
+    return {
+      publicMethod: function(){
+        privateMethod1();
+      }
+    };
+  })( jQ, _);
+
+  anotherModule.publicMethod();
 
 
-
-})();
+})(window.jQuery, window._);
