@@ -2,17 +2,16 @@
 
   'use strict';
 
-  console.log('The module pattern is loading.');
+  var counter = 30;
 
   /*
     In JavaScript, there are several options for implementing modules, and they are:
-      1) The Module Pattern
-      2) Object literal notion
+      1) Object literal notion
+      2) The Module Pattern
       3) AMD modules
       4) CommonJS modules
       5) ECMAScript Harmony modules
    */
-
 
   // ------------------------------------------------------------------------ //
   // ------------------------- Object Literals ------------------------------ //
@@ -64,6 +63,138 @@
   // Outputs: Caching is: disabled
   myModule.reportMyConfig();
 
+
+  // ------------------------------------------------------------------------ //
+  // ------------------------ The Module Pattern ---------------------------- //
+  // ------------------------------------------------------------------------ //
+  /*
+    The Module pattern was originally defined as a way to provide both "private"
+    and "public" encapsulation for classes. What this results in is a reduction
+    in the likelihood of our function defined in additional scripts on the page.
+
+    Privacy:
+      - Privacy is achieved via using closures.
+      - This pattern is very similar to immediately-invoked-function expression (IIFE)
+   */
+  var testModule = (function(){
+
+    // counter variable enjoys its private isolated environment
+    var counter = 0;
+
+    return {
+      incrementCount: function(){
+        return counter+=1;
+      },
+
+      resetCounter: function(){
+        console.log( 'Counter value prior to reset: ' + counter );
+        counter = 0;
+      },
+
+      get: function(){
+        return counter;
+      }
+    }
+  })();
+
+  // Increment our counter
+  testModule.incrementCount();
+  assert( testModule.get() === 1,
+  'The Module Pattern: testModule.get() === ' + testModule.get() );
+
+  // Reset our counter
+  testModule.resetCounter();
+  assert( testModule.get() === 0,
+  'The Module Pattern: testModule.resetCounter() should === 0');
+
+  var myNamespace = (function(){
+
+    var myPrivateVar, myPrivateMethod;
+
+    // A private counter variable
+    myPrivateVar = 0;
+
+    // A private function which logs any arguments
+    myPrivateMethod = function(foo){
+      console.log(foo);
+    };
+
+    return {
+      // A public variable
+      myPublicVar: 'foo',
+
+      // A public function utilizing privates
+      myPublicFunction: function( bar ) {
+
+        // Increment our private counter;
+        myPrivateVar += 1;
+
+        // Call our private method using bar
+        myPrivateMethod( bar );
+      }
+    }
+  })();
+
+
+  /**
+   * basketModule returns an object with a public API we can use
+   */
+  var basketModule = (function(){
+
+    // privates
+    var basket = [];
+
+    function doSomethingPrivate(){}
+    function doSomethingElsePrivate(){}
+
+    // Returns an object exposed to the public
+    return {
+
+      // Add items to our basket
+      addItem: function addItem( values ) {
+        basket.push( values );
+      },
+
+      // Get the count of items in the basket
+      getItemCount: function getItemCount() {
+        return basket.length;
+      },
+
+      // Public alias to a private function
+      doSomething: doSomethingPrivate,
+
+      // Get the total value of items in the basket
+      getTotal: function getTotal(){
+
+        var q = this.getItemCount(),
+            p = 0;
+
+        // Calculate totalCount using while loop for faster performance
+        while (q--) {
+          p += basket[q].price;
+        }
+        return p;
+      }
+    };
+  })();
+
+  // Adds break item
+  basketModule.addItem({
+    item: 'bread',
+    price: 0.5
+  });
+
+  // Adds butter item
+  basketModule.addItem({
+    item: 'butter',
+    price: 0.3
+  });
+
+  console.log(basketModule.getTotal() );
+
+  // Test total basket value, and should be 0.5 + 0.3 = 0.8
+  assert( basketModule.getTotal() === (0.5+0.3),
+  'The Module Pattern: basketModule should contains 2 items: bread && butter');
 
 
 
