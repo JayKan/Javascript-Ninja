@@ -228,5 +228,45 @@
 
   anotherModule.publicMethod();
 
+  // ------------------------------------------------------------------------ //
+  // --------------------- The Revealing Module Pattern --------------------- //
+  // ------------------------------------------------------------------------ //
+  /**
+   * The Revealing Module Pattern is a slightly improved version of "The Module Pattern"
+   * The result of "The Revealing Module Pattern" was an updated pattern where we would
+   * simply define all our functions and variables in the private scope and return an
+   * anonymous object with pointers to the private functionality we wished to reveal to public.
+   */
+  var myRevealingModule = (function(){
+
+    var privateVar = 'Kobe Bryant',
+        publicVar  = 'Hey there!';
+
+    function privateFunction(){
+      console.log( 'Name: ' + privateVar );
+      return privateVar;
+    }
+
+    function publicSetName( name) {
+        privateVar = name;
+    }
+
+    function publicGetName(){
+      return privateFunction();
+    }
+    // Reveal public pointers to private
+    // functions and properties.
+    return {
+      setName: publicSetName,
+      greeting: publicVar,
+      getName: publicGetName
+    };
+  })();
+
+  myRevealingModule.setName( 'Jay Kan' );
+  var myName = myRevealingModule.getName();
+  assert( myName === 'Jay Kan',
+  'The Revealing Module Pattern: My name should be === ' + myName );
+
 
 })(window.jQuery, window._);
