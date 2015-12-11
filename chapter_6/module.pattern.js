@@ -137,7 +137,12 @@
 
 
   /**
-   * basketModule returns an object with a public API we can use
+   * basketModule returns an object with a public API we can use.
+   *
+   * Benefits of leveraging IIFE pattern:
+   * - The freedom to have private functions && private members which can only be
+   * consumed by our module. As they aren't exposed to the rest of the page, they're
+   * considered truly private!!
    */
   var basketModule = (function(){
 
