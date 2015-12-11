@@ -18,7 +18,7 @@
   var object_b = Object.create( Object.prototype );
 
   // or (3rd)
-  var object_c = new Object();
+  var object_c = new Object({});
 
   // There are 4 ways in which keys and values can be assigned:
 
@@ -156,8 +156,6 @@
   assert( typeof myNewCar.toString === 'function',
   'Constructor with Prototype: myNewCar is instantiated prior to myNewCar.prototype.toString() method declaration');
   console.log(myNewCar.toString() );
-
-
 
 
 })();
