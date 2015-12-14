@@ -268,5 +268,133 @@
   assert( myName === 'Jay Kan',
   'The Revealing Module Pattern: My name should be === ' + myName );
 
+  // ------------------------------------------------------------------------ //
+  // ---------------------- The Singleton Pattern --------------------------- //
+  // ------------------------------------------------------------------------ //
+  /*
+    Singletons differ from static classes (or objects) as we can delay their initialization, generally
+    because they require some information that may not be available during initialization time. In JavaScript,
+    Singletons server as a shared resource namespace which isolate implementation code from the global namespace
+    so as to provide a single unit point of access for functions.
+
+    The applicability of the Singleton Pattern:
+     - There must be exactly one instance of a class, and it must be accessible to clients from a well-known access point.
+     - When the sole instance should be extensible by subclassing, and clients should be able to use an extended instance
+       without modifying their code.
+
+    In practice, the Singleton pattern is useful when exactly one object is needed to coordinate others across a system.
+   */
+  var mySingleton = (function(){
+    // Instance stores a reference to the Singleton
+    var instance;
+    function init(){
+      // Singleton
+      // Private methods and variables
+      function privateMethod(){
+        console.log('I am private.');
+      }
+
+      var privateVariable = 'I am also private.';
+      var privateRandomNumber = Math.random();
+
+      return {
+        // Public methods and variables
+        publicMethod: function(){
+          console.log( 'The public can se me!');
+        },
+
+        publicProperty: 'I am also public',
+
+        getRandomNumber: function(){
+          return privateRandomNumber;
+        }
+      }
+    }
+
+    return {
+      // Get the Singleton instance if one exists
+      // or create one if it doesn't.
+      getInstance: function(){
+        if (!instance) {
+          instance = init();
+        }
+        return instance;
+      }
+    };
+  })();
+
+  var myBadSingleton = (function(){
+    // Instance stores a reference to the Singleton
+    var instance;
+
+    function init(){
+      // Singleton
+      var privateRandomNumber = Math.random();
+      return {
+        getRandomNumber: function(){
+          return privateRandomNumber
+        }
+      };
+    }
+
+    return {
+      // Always create a new Singleton instance
+      getInstane: function(){
+        instance = init();
+        return instance;
+      }
+    };
+  })();
+
+  // Usage:
+  var singleA = myBadSingleton.getInstane();
+  var randomA = singleA.getRandomNumber();
+  assert(randomA,
+  'The Singleton Pattern: Singleton_A has a random number: ' + randomA);
+
+  // A good example of using Singleton Pattern:
+  var SingletonTester = (function(){
+
+    // options: an object containing configuration options for the singleton.
+    // e.g var options = { name: 'test', pointX: 5 };
+    function Singleton( options ) {
+
+      // set options to the options supplied
+      // or an empty object if none are provided.
+      options = options || {};
+
+      // set some properties for our singleton
+      this.name = 'SingletonTester';
+
+      this.pointX = options.pointX || 6;
+
+      this.pointY = options.pointY || 10;
+    }
+
+    // our instance reference holder;
+    var instance;
+
+    // an emulation of static variables and methods
+    return {
+
+      name: 'SingletonTester',
+
+      // Method for getting an instance. It returns
+      // a singleton instance of a singleton object.
+      getInstance: function( options ) {
+        if ( instance === undefined ) {
+          instance = new Singleton( options );
+        }
+        return instance;
+      }
+    };
+  })();
+
+  var singletonTest = SingletonTester.getInstance({
+    pointX: 5
+  });
+
+  assert( singletonTest.pointX === 5,
+  'The Singleton Pattern: singletonTest.pointX should === ' + singletonTest.pointX);
 
 })(window.jQuery, window._);
