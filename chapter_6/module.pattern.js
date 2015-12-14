@@ -615,6 +615,57 @@
   pubSub.publish( 'inbox/newMessage', 'Hello! Are you still there?' );
 
 
+  // Return the current local time to be used in the our UI later
+  var getCurrentTime = function(){
+    var date  = new Date(),
+        m     = date.getMonth() + 1,
+        d     = date.getDate(),
+        y     = date.getYear(),
+        t     = date.toLocaleTimeString().toLowerCase();
+    return( m + '/' + d + '/' + y + ' ' + t );
+  };
+
+  // Add a new row of data to our fictional grid component
+  function addGridRow( data ){
+    // ui.grid.addRow( data );
+    console.log( 'Updated grid component with: ' + data );
+  }
+
+  // Update our fictional grid to show the time it was last updated.
+  function updateCounter( data ) {
+    // ui.grid.updateLastChanged( getCurrentTime() );
+    console.log( 'Data last updated at: ' + getCurrentTime() + ' with ' + JSON.stringify(data) );
+  }
+
+  // Update the grid using the data passed to our subscribers
+  var gridUpdate = function( topic, data ) {
+    if ( data !== undefined ) {
+      addGridRow(data);
+      updateCounter(data);
+    }
+  };
+
+  // Create a subscription to the newDataAvailable topic.
+  var subscriber = pubSub.subscribe( 'newDataAvailable', gridUpdate );
+
+  // The following represents updates to our data layer. This could be
+  // powered by ajax requests which broadcast that new data is available
+  // to the rest of the application.
+
+  // Publish changes to the gridUpdated topic representing new entries.
+  pubSub.publish( 'newDataAvailable', {
+    summary: 'Apple made $5 billion',
+    identifier: 'APPL',
+    stockPrice: 570.91
+  });
+
+  pubSub.publish( 'newDataAvailable', {
+    summary: 'Microsoft made $20 billion',
+    identifier: 'MSFT',
+    stockPrice: 30.85
+  });
+
+
 
 
 
