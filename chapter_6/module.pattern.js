@@ -679,9 +679,11 @@
         the same function) instead of creating their own individual copies.
 
     To achieve 'real prototypal inheritance', as defined in the ECMAScrip 5 standard,
-    requires the use of object.create:
+    requires the use of object.create():
       - Object.create(): creates an object which has a specified prototype and optionally
         contains specified properties as well.
+      - allow us to implement differential inheritance where objects are able to directly
+        inherit from other objects.
    */
   var myCar = {
     name: 'Honda Accord',
@@ -698,5 +700,56 @@
   // Now we can see that one is a prototype of the other.
   assert( yourCar.name,
   'The Prototype Pattern: yourCar.name() is === ' + yourCar.name );
+
+  var vehicle_b = {
+    getModel: function() {
+      console.log( 'The model of this vehicle is ..' + this.model );
+    }
+  };
+
+  var car = Object.create( vehicle_b, {
+    'id': {
+      value: 123,
+      // writable: false, configurable: false by default
+      enumerable: true
+    },
+    'model': {
+      value: 'Honda',
+      enumerable: true
+    }
+  });
+
+  var vehiclePrototype = {
+    init: function( carModel ) {
+      this.model = carModel;
+    },
+
+    getModel: function(){
+      console.log( 'The model of this vehicle is..' + this.model);
+    }
+  };
+  function vehicle( model ){
+    function F() {}
+    F.prototype = vehiclePrototype;
+    var f = new F();
+    f.init( model );
+    return f;
+  }
+
+  var carAgain = vehicle( 'Ford Escort' );
+  assert( carAgain.model === 'Ford Escort',
+  'The Prototype Pattern: carAgain.model() should === ' + carAgain.model );
+
+  // A final alternative implementation of the Prototype pattern could be the following:
+  var beget = (function(){
+    function F() {}
+    return function( proto ){
+      F.prototype = proto;
+      return new F();
+    };
+  })();
+
+
+
 
 })(window.jQuery, window._);
