@@ -511,10 +511,108 @@
     container.appendChild( check );
   }
 
+  // ------------------------------------------------------------------------ //
+  // ----------------- The Publish/Subscribe Implementation ----------------- //
+  // ------------------------------------------------------------------------ //
+  var pubSub = {};
+  (function(myObject) {
+
+    // Storage for topics that can be broadcast or
+    // listened to
+    var topics = {};
+
+    // An topic identifier
+    var subUid = -1;
+
+    // Publish or broadcast events of interest
+    // with a specific topic name and arguments
+    // such as the data to pass along.
+    myObject.publish = function( topic, args ) {
+
+      if ( !topics[topic] ){
+        return false;
+      }
+
+      var subscribers = topics[topic],
+          len = subscribers ? subscribers.length : 0;
+
+      while (len--) {
+        subscribers[len].func( topic, args );
+      }
+      return this;
+    };
+
+    // Subscribe to events of interest with a specific
+    // topic name and a callback function, to be executed
+    // when the topic/event is observed.
+    myObject.subscribe = function( topic, func ){
+
+      if ( !topics[topic] ) {
+        topics[topic] = [];
+      }
+
+      var token = ( ++subUid ).toString();
+      topics[topic].push({
+        token: token,
+        func: func
+      });
 
 
+      return token;
+    };
 
+    // Unsubscribe from a specific topic, based on a
+    // tokenized reference to the subscription.
+    myObject.unsubscribe = function( token ){
+      for ( var p in topics ) {
+        if ( topics[p] ) {
+          for ( var i = 0, j = topics[p].length; i < j; i++ ){
+            if ( topics[p][i].token === token ){
+              topics[p].splice( i, 1 );
+              return token;
+            }
+          }
+        }
+      }
+      return this;
+    };
+  })(pubSub);
 
+  // Another simple message handler
+
+  // A simple message logger that logs any topics and data received
+  // our through subscriber.
+  var messageLogger = function( topics, data ) {
+    assert(true,
+    'The pubSub logging: ' + topics + ': ' + JSON.stringify(data) );
+  };
+
+  // Subscribers listen for topics they have subscribed to and
+  // invoke a callback function (e.g messageLogger) once a notification
+  // is broadcast on that topic.
+  var subscription  = pubSub.subscribe( 'inbox/newMessage', messageLogger );
+  console.log('Token: ' + subscription);
+  // Publishers are in charge of publishing topics OR notifications of
+  // interest to the application. e.g:
+  pubSub.publish( 'inbox/newMessage', 'Hello World from pubSub.publish()');
+
+  // or
+  pubSub.publish( 'inbox/newMessage', [ 'test', 'a', 'b', 'c' ] );
+
+  // or
+  pubSub.publish( 'inbox/newMessage', {
+    sender: 'hello@google.com',
+    body: 'Hey again!'
+  });
+
+  // We can also unsubscribe if we no longer wish for our subscribers
+  // to be notified
+  pubSub.unsubscribe( subscription );
+
+  // Once being unsubscribed, this for example won't result in
+  // our messageLogger being executed as the subscriber is no
+  // longer listening.
+  pubSub.publish( 'inbox/newMessage', 'Hello! Are you still there?' );
 
 
 
