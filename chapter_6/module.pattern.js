@@ -665,22 +665,38 @@
     stockPrice: 30.85
   });
 
+  // ------------------------------------------------------------------------ //
+  // ---------------------- The Prototype Pattern --------------------------- //
+  // ------------------------------------------------------------------------ //
+  /*
+    The Prototype Pattern:
+      - Creates objects based on a template of an existing object via cloning.
+      - The prototype object itself is effectively used a blueprint for each
+        object that the constructor creates.
+      - The prototype pattern not only is an easy way to implement inheritance,
+        but it can also come with a performance boost as well: when defining a function
+        in an object, they're all created by reference (so all child objects point to
+        the same function) instead of creating their own individual copies.
 
+    To achieve 'real prototypal inheritance', as defined in the ECMAScrip 5 standard,
+    requires the use of object.create:
+      - Object.create(): creates an object which has a specified prototype and optionally
+        contains specified properties as well.
+   */
+  var myCar = {
+    name: 'Honda Accord',
+    drive: function() {
+      console.log( 'Weeee. I am driving.');
+    },
+    panic: function() {
+      console.log( 'Wait. How do you stop this thing?');
+    }
+  };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  // Use Object.create to instantiate a new car.
+  var yourCar = Object.create( myCar );
+  // Now we can see that one is a prototype of the other.
+  assert( yourCar.name,
+  'The Prototype Pattern: yourCar.name() is === ' + yourCar.name );
 
 })(window.jQuery, window._);
