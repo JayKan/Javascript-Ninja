@@ -166,9 +166,9 @@
     single object and gives us the ability to both parameterize and pass method calls around
     that can be executed at our discretion.
    */
-  (function(){
+  var carManager = (function(){
 
-    var carManager = {
+    return {
 
       // request information
       requestInfo: function( model, id ) {
@@ -183,9 +183,64 @@
       // arrange a viewing
       arrangeViewing: function( model, id ) {
         return 'You have successfully booked a viewing of ' + model + ' (' + id + ' ) ';
+      },
+
+      execute: function( name ){
+        return carManager[name] && carManager[name].apply( carManager, [].slice.call(arguments, 1) );
       }
     };
   })();
+  carManager.execute( "arrangeViewing", "Ferrari", "14523" );
+  carManager.execute( "requestInfo", "Ford Mondeo", "54323" );
+  carManager.execute( "requestInfo", "Ford Escort", "34232" );
+  carManager.execute( "buyVehicle", "Ford Escort",  "34232" );
+
+
+  // ----------------------------------------------------------------------------------- //
+  // ----------------------------- The Facade Pattern ---------------------------------- //
+  // ----------------------------------------------------------------------------------- //
+  /*
+    The Facade Pattern provides a convenient high-level interface to a larger body of code,
+    hiding its true underlying complexity. Think of it as simplifying the API being presented
+    to other developers.
+   */
+  var module = (function(){
+
+    var _private = {
+      i: 5,
+      get: function() {
+        console.log( 'Current value: ' + this.i );
+      },
+      set: function(val){
+        this.i = val;
+      },
+      run: function(){
+        console.log( 'running' );
+      },
+      jump: function(){
+        console.log( 'jumping' );
+      }
+    };
+
+    return {
+      facade: function( args ) {
+        _private.set( args.val );
+        _private.get();
+        if (args.run) {
+          _private.run();
+        }
+      },
+      getValue: function(){
+        return _private.i;
+      }
+    };
+  })();
+
+  // Outputs: 'Current value: 10' and 'running';
+  module.facade({ run :true, val: 10 });
+  assert( module.getValue() === 10,
+  'The Facade Pattern: module.getValue() === ' + module.getValue() );
+
 
 
 
