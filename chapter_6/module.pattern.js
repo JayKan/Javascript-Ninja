@@ -749,6 +749,98 @@
     };
   })();
 
+  // ----------------------------------------------------------------------------------- //
+  // ----------------------------- The Facade Pattern ---------------------------------- //
+  // ----------------------------------------------------------------------------------- //
+  /*
+   The Facade Pattern provides a convenient high-level interface to a larger body of code,
+   hiding its true underlying complexity. Think of it as simplifying the API being presented
+   to other developers.
+   */
+  var module = (function(){
+
+    var _private = {
+      i: 5,
+      get: function() {
+        console.log( 'Current value: ' + this.i );
+      },
+      set: function(val){
+        this.i = val;
+      },
+      run: function(){
+        console.log( 'running' );
+      },
+      jump: function(){
+        console.log( 'jumping' );
+      }
+    };
+
+    return {
+      facade: function( args ) {
+        _private.set( args.val );
+        _private.get();
+        if (args.run) {
+          _private.run();
+        }
+      },
+      getValue: function(){
+        return _private.i;
+      }
+    };
+  })();
+
+  // Outputs: 'Current value: 10' and 'running';
+  module.facade({ run :true, val: 10 });
+  assert( module.getValue() === 10,
+    'The Facade Pattern: module.getValue() === ' + module.getValue() );
+
+  // ----------------------------------------------------------------------------------- //
+  // ----------------------------- The Mixins Pattern ---------------------------------- //
+  // ----------------------------------------------------------------------------------- //
+  /*
+   The Mixins Pattern:
+   - collecting functionality via extension.
+   - allows objects to borrow (or inherit) functionality from them with a minimal amount of
+   complexity.
+   - they can be viewed as objects with attributes and methods that can be easily shared
+   across a number of other object prototypes.
+   */
+  var myMixins = {
+    moveUp: function(){
+      console.log( 'move up' );
+    },
+    moveDown: function(){
+      console.log( 'move down' );
+    },
+    stop: function() {
+      console.log( 'Stop! in the name of love!' );
+    }
+  };
+
+  // A skeleton carAnimator constructor
+  function CarAnimator() {
+    this.moveLeft = function() {
+      console.log( 'move left' );
+    };
+  }
+
+  // A skeleton personAnimator constructor
+  function PersonAnimator() {
+    this.moveRandomly = function() {
+      console.log( 'move randomly' );
+    };
+  }
+
+  // Extend both constructors with our Mixins
+  _.extend( CarAnimator.prototype, myMixins );
+  _.extend( PersonAnimator.prototype, myMixins );
+
+  // Create a new instance of carAnimator
+  var myCarAnimator = new CarAnimator();
+  myCarAnimator.moveLeft(); // calls CarAnimator instance method
+  myCarAnimator.moveDown(); // calls CarAnimator.prototype.moveDown()
+  myCarAnimator.stop(); // calls CarAnimator.prototype.stop()
+
 
 
 
