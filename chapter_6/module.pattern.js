@@ -842,6 +842,64 @@
   myCarAnimator.stop(); // calls CarAnimator.prototype.stop()
 
 
+  // Define a simple Car constructor
+  var Car = function(options){
+    this.model = options.model || 'no model provided';
+    this.color = options.color || 'no color provided';
+  };
+
+  // Define a Mixin constructor
+  var Mixin = function(){};
+  Mixin.prototype = {
+    driveForward: function(){
+      return 'I am driving forward now!';
+    },
+    driveBackward: function(){
+      return 'I am driving backward now!';
+    },
+    driveSideways: function(){
+      return 'I am driving sideways now!!!';
+    }
+  };
+
+  // Extend an existing object with a method from another
+  function augment(receivingClass, givingClass) {
+
+    // only provide certain methods
+    if (arguments[2]) {
+      for (var i = 2, len = arguments.length; i < len; i+=1) {
+        receivingClass.prototype[arguments[i]] = givingClass.prototype[arguments[i]];
+      }
+    }
+    // provide all methods
+    else {
+      for (var methodName in givingClass.prototype) (function(property){
+
+        // check to make sure the receiving class doesn't
+        // have a method of the same name as the one currently
+        // being processed.
+        if ( !Object.hasOwnProperty.call(receivingClass.prototype, property) ) {
+          receivingClass.prototype[property] = givingClass.prototype[property];
+        }
+      })(methodName)
+    }
+  }
+
+  // Augment the Car constructor to include "driveForward" and "driveBackward"
+  augment( Car, Mixin, 'driveForward', 'driveBackward');
+
+  // Create a new Car
+  var myNewCar = new Car({
+    model: 'Honda Accord',
+    color: 'Black'
+  });
+
+  // Test to make sure we now have access to the methods
+  assert(true,
+  'The Mixins Pattern: ' + myNewCar.driveForward() );
+  assert(true,
+  'The Mixins Pattern: ' + myNewCar.driveBackward() );
+
 
 
 })(window.jQuery, window._);
