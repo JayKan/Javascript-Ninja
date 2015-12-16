@@ -988,7 +988,53 @@
   assert(true,
   'The Decorator Pattern: screenSize for my MackBook === ' + mb.screenSize() );
 
+  // ----------------------------------------------------------------------------------- //
+  // -------------------------- Decorators with jQuery  -------------------------------- //
+  // ----------------------------------------------------------------------------------- //
+  var decoratorApp = decoratorApp || {};
 
+  // define the objects we're going to use
+  decoratorApp = {
+
+    defaults: {
+      validate: false,
+      limit: 5,
+      name: 'foo',
+      welcome: function(){
+        console.log( 'Welcome' );
+      }
+    },
+
+    options: {
+      validate: true,
+      name: 'bar',
+      helloWorld: function(){
+        console.log( 'Hello World' );
+      }
+    },
+
+    settings: {},
+
+    printObj: function printObj(obj) {
+      var arr = [], next;
+      jQ.each( obj, function(key, val) {
+        next = key + ': ';
+        next += jQ.isPlainObject(val) ? printObj(val) : val;
+        arr.push(next);
+      });
+      return '{ ' + arr.join(', ') + ' }';
+    }
+  };
+
+  // merge defaults and options, without modifying defaults explicitly.
+  decoratorApp.settings = jQ.extend({}, decoratorApp.defaults, decoratorApp.options);
+
+  assert(true,
+  'jQuery Decorators Example: ' + decoratorApp.printObj(decoratorApp.settings));
+  assert(true,
+  'jQuery Decorators Example: ' + decoratorApp.printObj(decoratorApp.options));
+  assert(true,
+  'jQuery Decorators Example: ' + decoratorApp.printObj(decoratorApp.defaults));
 
 
 
