@@ -944,6 +944,52 @@
   assert(truck.color === 'blue',
   'The Decorator Pattern: truck should have a differ color: ' + truck.color);
 
+  // Decorating Objects with multiple decorators
+  // The constructor to decorate
+  function MacBook() {
+    this.cost = function() { return 997; };
+    this.screenSize = function() { return 11.6 };
+  }
+
+  // Decorator 1
+  // Decorator 1 is overriding the MackBook() super-class objects .cost() function
+  // to return the current price of the MacBook plus the cost of the upgrade being specified.
+  function addMemoryCost(macBook) {
+    var v = macBook.cost();
+    macBook.cost = function() {
+      return v + 75;
+    };
+  }
+
+  // Decorator 2
+  function addEngravingCost(macBook) {
+    var v = macBook.cost();
+    macBook.cost = function() {
+      return v + 200;
+    };
+  }
+
+  // Decorator 3
+  function addInsuranceCost(macBook) {
+    var v = macBook.cost();
+    macBook.cost = function(){
+      return v + 250;
+    };
+  }
+
+  var mb = new MacBook();
+  addMemoryCost(mb);
+  addEngravingCost(mb);
+  addInsuranceCost(mb);
+
+  var totalCost = mb.cost();
+  assert( totalCost === (997+75+200+250),
+  'The Decorator Pattern: total cost for my MacBook === ' + totalCost );
+  assert(true,
+  'The Decorator Pattern: screenSize for my MackBook === ' + mb.screenSize() );
+
+
+
 
 
 
