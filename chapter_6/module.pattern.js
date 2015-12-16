@@ -901,5 +901,50 @@
   'The Mixins Pattern: ' + myNewCar.driveBackward() );
 
 
+  // ----------------------------------------------------------------------------------- //
+  // --------------------------- The Decorator Pattern --------------------------------- //
+  // ----------------------------------------------------------------------------------- //
+  /*
+    Decorators are a structural design pattern that aim to promote code re-use. Similar to Mixins,
+    they can be considered another viable alternative to object sub-classing.
+
+    Classically, Decorators offered the ability to add behavior to existing classes in a system
+    dynamically. The idea was that the decoration itself wasn't essential to the base functionality of
+    the class, otherwise it would be baked into the superClass itself.
+   */
+  // Example 1: Decorating Constructors with New Functionality
+  // A vehicle constructor
+  function Vehicle(type) {
+    this.vehicleType = type || 'car';
+    this.model = 'default';
+    this.license = '00000-000';
+  }
+
+  // Test instance for a basic vehicle
+  var testInstance = new Vehicle( 'car' );
+  console.log('Test vehicle instance: ' + JSON.stringify(testInstance));
+
+  // Lets create a new instance of vehicle, to be decorated.
+  var truck = new Vehicle( 'truck' );
+
+  // New functionality we're decorating vehicle with
+  truck.setModel = function(modelName) {
+    this.model = modelName;
+  };
+
+  truck.setColor = function(color){
+    this.color = color;
+  };
+
+  // Test the value setters and value assignments works correctly.
+  truck.setModel( 'CAT' );
+  truck.setColor( 'blue' );
+
+  console.log('Test truck instance: ' + JSON.stringify(truck));
+  assert(truck.color === 'blue',
+  'The Decorator Pattern: truck should have a differ color: ' + truck.color);
+
+
+
 
 })(window.jQuery, window._);
