@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Performance Considerations for Property Access</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+
+  <div id="testSubject"></div>
+
+  <!-- 12.2: Comparing the performance of DOM methods vs. Properties -->
+  <script type="text/javascript">
+    console.log('loading 12.2');
+    /*
+      In general, property access is faster than the corresponding DOM attribute methods,
+      especially in Internet Explorer.
+        - Property access > DOM access ( faster in terms of DOM performance )
+     */
+    var n,
+        begin,
+        end,
+        value,
+        count = 5000000,
+        testSubject = document.getElementById('testSubject');
+
+    // Tests a DOM method read
+    begin = new Date();
+    for (n = 0; n < count; n+=1) {
+      value = testSubject.getAttribute('id');
+    }
+    end = new Date();
+    assert(true,
+    '12.2: Time for [ DOM ] method read: ' + (end.getTime() - begin.getTime()));
+
+    // Tests a property read
+    begin = new Date();
+    for (n = 0; n < count; n+=1) {
+      value = testSubject.id;
+    }
+    end = new Date();
+    assert(true,
+    '12.2: Time for [ property ] read: '  + (end.getTime() - begin.getTime()));
+
+    // Tests a DOM method write
+    begin = new Date();
+    for (n = 0; n < count; n+=1) {
+      testSubject.setAttribute('id', 'testSubject');
+    }
+    end = new Date();
+    assert(true,
+    '12.2: Time for [ DOM ] method write: ' + (end.getTime() - begin.getTime()));
+
+    // Tests a property write
+    begin = new Date();
+    for (n = 0; n < count; n+=1 ) {
+      testSubject.id = 'testSubject';
+    }
+    end = new Date();
+    assert(true,
+    '12.2: Time for [ property ] write: ' + (end.getTime() - begin.getTime()));
+
+
+  </script>
+</body>
+
+</html>
