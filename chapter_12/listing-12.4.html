@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Demonstrating how browsers strong-arm form elements</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+<body>
+  <form id="testForm" action="/">
+    <input type="text" id="id">
+    <input type="text" name="action">
+  </form>
+
+  <!-- 12.4: Demonstrating how browsers strong-arm form elements -->
+  <script type="text/javascript">
+    window.onload = function(){
+      console.log('loading 12.4');
+
+      var form = document.getElementById('testForm');
+
+      // Tests if properties have been stomped upon
+      assert(form.id === 'testForm',
+      '12.4: The id property is untouched.');
+      assert(form.action === '/',
+      '12.4: The action property is untouched.');
+
+      // Tests if attributes have ben mangled.
+      assert(form.getAttribute('id') === 'testForm',
+      '12.4: The id attribute is untouched.');
+      assert(form.getAttribute('action') === '/',
+      '12.4: The action attribute is untouched.');
+
+    };
+  </script>
+</body>
+</html>
