@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>URL normalization</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+</head>
+
+<body>
+
+  <a href="listing-12.5.html" id="testLink">Self Link</a>
+
+  <script type="text/javascript">
+    /**
+     * There's a "feature" in all modern browsers that violates the principle of least
+     * surprise: when accessing a property that references a URL (such as href, src, or action) the
+     * URL value is automatically converted from its original form into a full canonical URL.
+     */
+    var link = document.getElementById('testLink');
+
+    // Obtains the original node value right from the
+    // horse's mouth (the node information).
+    var linkHref = link.getAttributeNode('href').nodeValue;
+
+    // Tests that the original node value matches that specified
+    // in the element markup.
+    assert(linkHref === 'listing-12.5.html',
+    '12.5: link node value is ok.');
+
+    // Tests that the href property contains that we'd expect:
+    // the same value. (Be careful because it DOESN't)
+    assert(link.href === 'listing-12.5.html',
+    '12.5: link property value is ok.');
+    console.log(link.href);
+
+    // Tests that attribute value is what we expect.
+    assert(link.getAttribute('href') === 'listing-12.5.html',
+    '12.5: link attribute value not modified.');
+
+  </script>
+</body>
+
+</html>
