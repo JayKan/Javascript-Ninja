@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Listing 12.7</title>
+  <link type="text/css" rel="stylesheet" href="../common/css/styles.css">
+  <script type="text/javascript" src="../common/js/simple_test_assertion.js"></script>
+
+  <style>
+    div { font-size: 1.8em; border: 0 solid gold; }
+  </style>
+</head>
+
+<body>
+
+  <!-- This test element should receives multiple styles from various places. -->
+  <div style="color:#000;" title="Ninja power!">
+    忍者パワー
+  </div>
+
+  <!-- 12.7: Examining the style property -->
+  <script type="text/javascript">
+
+    window.onload = function(){
+
+      var div = document.getElementsByTagName('div')[0];
+
+      // Tests that the inlined color style was recorded.
+      assert(div.style.color === 'rgb(0, 0, 0)' ||
+             div.style.color === '#000',
+      '12.7: color was recorded');
+
+      // Tests that the inherited font-size style was recorded.
+      assert(div.style.fontSize === '1.8em',
+      '12.7: fontSize was recorded');
+
+      console.log(div.style);
+
+      // Tests that the inherited border width style was recorded.
+      assert(div.style.borderWidth === '0',
+      '12.7: borderWidth was recorded.');
+
+      // Replaces the borderWidth
+      div.style.borderWidth = '4px';
+
+      assert(div.style.borderWidth === '4px',
+      '12.7: Re-test new borderWidth === 4px');
+
+    };
+  </script>
+</body>
+
+</html>
